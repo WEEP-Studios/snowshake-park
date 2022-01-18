@@ -55,6 +55,38 @@ function moveOlof(olof, x, y) {
 
 }
 
+function bounceOlofTo(x, y) {
+
+    olof.isBounce = true;
+
+    const dx = x - olof.x;
+    const dy = y- olof.y;
+
+    const timesToUpdate = dx / 0.3;
+
+    let times = 0;
+
+    const olofBouncer = setInterval(function() {
+
+        olof.x += dx / timesToUpdate * times;
+
+        console.log(olof.x, olof.y, x, y);
+
+        times++;
+
+        if (olof.x >= x) {
+            olof.isBounce = false;
+            clearInterval(olofBouncer);
+        }
+
+    }, 30)
+
+}
+
+function getBounceY(x, height) {
+    return -(0.3 * x * x + height);
+}
+
 
 
 function updateOlof() {
@@ -70,6 +102,7 @@ function updateOlof() {
 
     if (doesOlofSeeMe(center_x, center_y, x, y, dx, dy, angle)) {
         moveOlof(olof, velocityX, velocityY);
+        // if (!olof.isBounce) bounceOlofTo(x, y);
     }
 }
 

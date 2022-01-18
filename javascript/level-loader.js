@@ -10,6 +10,10 @@
 function loadLevel(id) {
     const level = LEVELS.find(level => level.id === id);
 
+    if (level.olof?.enabled) {
+        loadOlof(level.olof);
+    }
+
     const walls = addWalls(level.wallPositions);
     const trees = addTrees(level.treePositions);
 
@@ -21,9 +25,6 @@ function loadLevel(id) {
 
     baseSpeed = level.playerSpeed || DEFAULT_baseSpeed;
 
-    if (level.olof?.enabled) {
-        loadOlof(level.olof);
-    }
     if (level.night?.enabled) {
         loadNight(level.night);
     }

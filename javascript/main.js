@@ -33,7 +33,7 @@ app.ticker.add(update);
 loadLevel('test')
 
 
-setInterval(updateTrees, 2000);
+setInterval(updateTrees, 500);
 
 
 

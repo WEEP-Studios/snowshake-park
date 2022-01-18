@@ -71,6 +71,8 @@ function interact(key) {
 
             if (skakTimeOut === undefined) {
                 skakTimeOut = setTimeout(() => {
+
+                    
                     generateFallParticles(tree, crown.textureState);
                     crown.texture = CROWN_TEXTURES[crown.textureName]._0;
                     crown.textureState = 0;
@@ -108,13 +110,11 @@ function interact(key) {
 
 function generateFallParticles(tree, particle_amount) {
 
-    const particles = [];
+    let particles = [];
     const crownX = tree.x;
     const crownY = tree.y + tree.children[1].y;
 
-    for (let i = 0; i < particle_amount * random(1, 3); i++) {
-        
-        // GENERATE PARTICLES
+    for (let i = 0; i < particle_amount * 2 * (random(8, 20) / 8 * particle_amount); i++) {
 
         const particle = new PIXI.Sprite(SNOWPUFF_TEXTURES[random(0, SNOWPUFF_TEXTURES.length)]);
         particle.x = crownX + (random(0, tree.children[0].width) * (random(0, 2) === 1 ? 1 : -1));
@@ -125,18 +125,19 @@ function generateFallParticles(tree, particle_amount) {
 
     const snowFallInterval = setInterval(function() {
         particles.forEach(particle => {
-            particle.y += random(2, 5);
-        });
-    }, 15);
+            particle.y += (((tree.y + tree.children[0].height / 2) - (particle.y + particle.height)) / 70) + random(1, 2.5);// random(2, 5);
 
-    setTimeout(() => {
-        clearInterval(snowFallInterval);
-    }, 6 * 1000);
+            if ((particle.y + particle.height) > (tree.y + tree.children[0].height / 2)) {
+                particle.destroy();
+                particles = particles.filter(e => e !== particle);
+            } 
+
+
+        });
+        if (particles.length === 0) clearInterval(snowFallInterval);
+    }, 10);
 
 }
-
-
-
 
 function move(key) {
     if (['arrowleft', 'a'].includes(key)) {
