@@ -6,27 +6,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>HTML 5 Boilerplate</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
 
     <link rel="stylesheet" href="./styles/main.css">
-    <link rel="stylesheet" href="./styles/intro.css">
-
-
+    <link rel="stylesheet" href="./styles/index.css">
 </head>
 
+<script>
+
+    window.onload = (event) => {
+        var gameLogoEffect = new Audio('./music/WeepStudiosEffect.mp3');
+        gameLogoEffect.volume = 0.15;
+
+        var menuMusic = new Audio('./music/menu-music.mp3');
+        menuMusic.loop = true;
+        menuMusic.volume = 0.25;
+
+        setTimeout(() => {
+            $('.intro').hide();
+            $('.menu').show();
+            menuMusic.play();
+        }, 5 * 1000);
+
+        setTimeout(() => {
+            gameLogoEffect.play();
+        }, 1 * 1000);
+
+    };
+
+
+
+
+</script>
+
 <body>
-    <div class="image">
-        <img class="fade-in" src="./imgs/weep.png" alt="logo">
+
+    <div class="noselect">
+
+        <div class="intro">
+
+            <div class="image">
+                <img class="fade-in" src="./imgs/weep2.png" alt="WEEP Studios">
+            </div>
+
+        </div>
+
+
+        <div class="menu">
+
+            <div class="snowflakes" aria-hidden="true">
+                <div class="snowflake">❅</div>
+                <div class="snowflake">❅</div>
+                <div class="snowflake">❅</div>
+                <div class="snowflake">❅</div>
+                <div class="snowflake">❅</div>
+                <div class="snowflake">❅</div>
+                <div class="snowflake">❅</div>
+                <div class="snowflake">❅</div>
+                <div class="snowflake">❅</div>
+                <div class="snowflake">❅</div>
+                <div class="snowflake">❅</div>
+            </div>
+
+
+
+            <div class="buttons">
+                <h1>Snowshake Park</h1>
+                <a href="./game.html" class="btn-link">Play game</a>
+            </div>
+
+
+
+
+
+
+        </div>
+
+
     </div>
 
-    <script>
 
-        window.onload = (event) => {
-          setTimeout(() => {
-            window.location.replace("./menu.html");
-          }, 10 * 1000);
-        };
-    
-      </script>
 </body>
 
 </html>

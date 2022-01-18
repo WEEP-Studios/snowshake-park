@@ -9,7 +9,7 @@
 
 
 function updateMovementInteraction() {
-    currentSpeed = slowDown() ? BASESPEED / 2 : BASESPEED;
+    currentSpeed = slowDown() ? baseSpeed / 2 : baseSpeed;
 
     for (const key of moveKeys) {
         move(key);
@@ -20,11 +20,16 @@ function updateMovementInteraction() {
     }
 
     for (const wall of currentLevel.walls) {
-        (b.hit(sprite, wall, true))
+        b.hit(sprite, wall, true);
     }
-    for (const tree of currentLevel.trees) {
-        (b.hit(sprite, tree.children[1], true));
-    }
+
+    // for (const tree of currentLevel.trees) {
+    //     (b.hit(sprite, tree.children[1], !tree.dead));
+    // }
+
+
+
+
 
     if (moveKeys.length === 0 && interactKeys.length === 0) {
         sprite.stop();
@@ -33,6 +38,8 @@ function updateMovementInteraction() {
         skakTimeOut = undefined;
     }
 }
+
+
 
 
 
@@ -64,8 +71,17 @@ function interact(key) {
 
             if (skakTimeOut === undefined) {
                 skakTimeOut = setTimeout(() => {
+                    generateFallParticles(tree, crown.textureState);
                     crown.texture = CROWN_TEXTURES[crown.textureName]._0;
                     crown.textureState = 0;
+
+
+
+                    
+
+
+
+
 
                     // clearing
                     clearTimeout(skakTimeOut);
@@ -90,6 +106,35 @@ function interact(key) {
 }
 
 
+function generateFallParticles(tree, particle_amount) {
+
+    const particles = [];
+    const crownX = tree.x;
+    const crownY = tree.y + tree.children[1].y;
+
+    for (let i = 0; i < particle_amount * random(1, 3); i++) {
+        
+        // GENERATE PARTICLES
+
+        const particle = new PIXI.Sprite(SNOWPUFF_TEXTURES[random(0, SNOWPUFF_TEXTURES.length)]);
+        particle.x = crownX + (random(0, tree.children[0].width) * (random(0, 2) === 1 ? 1 : -1));
+        particle.y = crownY + (random(0, tree.children[0].height) * (random(0, 2) === 1 ? 1 : -1));
+        app.stage.addChild(particle);
+        particles.push(particle);
+    }
+
+    const snowFallInterval = setInterval(function() {
+        particles.forEach(particle => {
+            particle.y += random(2, 5);
+        });
+    }, 15);
+
+    setTimeout(() => {
+        clearInterval(snowFallInterval);
+    }, 6 * 1000);
+
+}
+
 
 
 
@@ -101,6 +146,7 @@ function move(key) {
             sprite.play();
         }
         sprite.x -= currentSpeed;
+        updateMask();
     }
     else if (['arrowright', 'd'].includes(key)) {
         if (hitBorder(sprite, currentSpeed, 0)) return;
@@ -109,6 +155,7 @@ function move(key) {
             sprite.play();
         }
         sprite.x += currentSpeed;
+        updateMask();
     }
     else if (['arrowdown', 's'].includes(key)) {
         if (hitBorder(sprite, 0, currentSpeed)) return;
@@ -117,6 +164,7 @@ function move(key) {
             sprite.play();
         }
         sprite.y += currentSpeed;
+        updateMask();
     }
     else if (['arrowup', 'w'].includes(key)) {
         if (hitBorder(sprite, 0, -currentSpeed)) return;
@@ -125,6 +173,7 @@ function move(key) {
             sprite.play();
         }
         sprite.y -= currentSpeed;
+        updateMask();
     }
 }
 
@@ -135,6 +184,34 @@ function hitBorder(player, x, y) {
     }
 }
 
+
+function updateMask() {
+
+    if (!nightData?.enabled) return;
+
+    const playerX = sprite.x + sprite.width / 2;
+    const playerY = sprite.y + sprite.height / 2;
+
+    const x = (nightData?.olofView ? olof.x : playerX);
+    const y = (nightData?.olofView ? olof.y : playerY);
+
+    const gr = new PIXI.Graphics();
+    gr.beginFill(0x0000ff);
+    gr.lineStyle(0);
+    gr.drawCircle(x, y, (nightData?.olofView ? OLOF_RADIUS : nightData?.radius));
+    gr.endFill();
+
+    app.stage.mask = gr;
+
+    if (!nightData?.olofView) {
+        nightPlayerCircle.x = playerX;
+        nightPlayerCircle.y = playerY;
+    }
+
+
+
+
+}
 
 
 

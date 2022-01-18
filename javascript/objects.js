@@ -5,19 +5,33 @@ function addTrees(treePositions) {
 
     for (const treePosition of treePositions) {
         const currentTree = new PIXI.Container();
-        const stump = PIXI.Sprite.from(STUMPS[random(0, 2)]);
+
+        const stumpTexture = Object.keys(STUMPS_TEXTURES)[random(0, 2)];
+        const stump = PIXI.Sprite.from(`sprites/error.png`);
+
         const crownTexture = Object.keys(CROWN_TEXTURES)[random(0, 2)];
         const crown = PIXI.Sprite.from(`sprites/error.png`);
+
+        const collapsed = PIXI.Sprite.from(`sprites/tree_leaves1_collapsed.png`);
+        collapsed.alpha = 0;
+
+        stump.texture = STUMPS_TEXTURES[stumpTexture].alive;
+        stump.textureName = stumpTexture;
         stump.anchor.set(0.5);
+
         crown.anchor.set(0.5);
         crown.texture = CROWN_TEXTURES[crownTexture]._0;
         crown.textureName = crownTexture;
         crown.textureState = 0;
         crown.shaking = false;
         crown.y = -83;
+
+        collapsed.anchor.set(0.5);
+
         currentTree.addChild(stump);
         currentTree.addChild(crown);
-    
+        currentTree.addChild(collapsed);
+
         currentTree.x = treePosition.x;
         currentTree.y = treePosition.y;
         currentTree.ox = currentTree.x; // original x pos

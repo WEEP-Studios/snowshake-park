@@ -13,6 +13,18 @@ sprite.animationSpeed = .1;
 sprite.loop = true;
 app.stage.addChild(sprite);
 
+var levelLoaded = false;
+
+
+
+
+
+
+var olof;
+
+
+
+
 
 
 
@@ -21,10 +33,13 @@ app.ticker.add(update);
 loadLevel('test')
 
 
-setInterval(updateTrees, 1000);
+setInterval(updateTrees, 2000);
 
 
 
 function update() {
+    if (!levelLoaded) return;
+
     updateMovementInteraction();
+    updateOlof();
 }

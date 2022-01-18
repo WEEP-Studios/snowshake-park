@@ -9,9 +9,40 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="./styles/main.css">
   <link rel="stylesheet" href="./styles/menu.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.1.3/pixi.min.js"></script>
+  <script src="https://unpkg.com/@pixi/sound/dist/pixi-sound.js"></script>
+
+
 </head>
 
+<script>
+
+
+
+// $(document).on('click', function() {
+//   console.log('eee')
+// var audio = new Audio('./music/menu-music.mp3');
+// audio.play();
+// })
+
+$(document).ready(function() { 
+  const sound = PIXI.sound.Sound.from('music/menu-music.mp3');
+sound.play();
+
+
+
+
+
+
+ });
+
+
+
+</script>
+
 <body>
+
   <div class="snowflakes" aria-hidden="true">
     <div class="snowflake">❅</div>
     <div class="snowflake">❅</div>
@@ -29,6 +60,7 @@
     <h1>Snowshake Park</h1>
     <a href="./game.html" class="btn-link">Play game</a>
   </div>
+
 </body>
 
 </html>

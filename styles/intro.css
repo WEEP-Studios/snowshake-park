@@ -2,8 +2,6 @@ body, html {
     display: flex;
     align-items: center;
     justify-content: center;
-
-    background-color: white;
 }
 
 
@@ -21,11 +19,11 @@ img {
 
 
 .fade-in {
-    animation: fadeIn ease 10s;
-    -webkit-animation: fadeIn ease 10s;
-    -moz-animation: fadeIn ease 10s;
-    -o-animation: fadeIn ease 10s;
-    -ms-animation: fadeIn ease 10s;
+    animation: fadeIn ease 3s;
+    -webkit-animation: fadeIn ease 3s;
+    -moz-animation: fadeIn ease 3s;
+    -o-animation: fadeIn ease 3s;
+    -ms-animation: fadeIn ease 3s;
 }
 
 @keyframes fadeIn {
