@@ -21,13 +21,10 @@ app.ticker.add(update);
 loadLevel('test')
 
 
-setInterval(updateTrees, 5000);
+setInterval(updateTrees, 1000);
 
 
 
 function update() {
-
-
     updateMovementInteraction();
-
 }

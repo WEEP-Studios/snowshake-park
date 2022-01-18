@@ -38,56 +38,54 @@ function updateMovementInteraction() {
 
 function interact(key) {
     if (['e'].includes(key)) {
-        let found = false;
-        for (const tree of currentLevel.trees) {
-            const crown = tree.children[1];
-            const touch = getTouchSide(tree.children[0], sprite);
-            console.log(touch);
-            if (touch) {
-                found = true;
-                if (!sprite.playing || sprite.totalFrames === 2) {
-                    console.log('here')
-                    sprite.textures = (touch === 'right' ? ANI_SHAKE_LEFT : ANI_SHAKE_RIGHT);
-                    sprite.play();
-                }
-                tree.x = tree.ox;
 
-                if (skakTimer % 20 >= 10) {
-                    tree.x += 3;
-                } else {
-                    tree.x -= 3;
-                }
-                skakTimer += 1;
+        let touch;
 
-                crown.shaking = true;
+        const tree = currentLevel.trees.find(tree => getTouchSide(tree.children[0], sprite));
+        if (tree) touch = getTouchSide(tree.children[0], sprite);
 
-                if (skakTimeOut === undefined) {
-                    skakTimeOut = setTimeout(() => {
-                        crown.texture = CROWN_TEXTURES[crown.textureName]._0;
-                        crown.textureState = 0;
-
-                        // clearing
-                        clearTimeout(skakTimeOut);
-                        skakTimeOut = undefined;
-                        interactKeys = interactKeys.filter(a => a !== key);
-                        skakningDone = true;
-                        setTimeout(() => {
-                            crown.shaking = false;
-                            skakningDone = false;
-                        }, SHAKECOOLDOWN * 1000);
-                    }, DEFAULT_SHAKETIME * 1000);
-                }
-            } else {
-                crown.shaking = false;
-                clearTimeout(skakTimeOut);
-                skakTimeOut = undefined;
-                if (!found) {
-                    //sprite.stop();
-                    //sprite.texture = IDLE_TEXTURE;
-                }
+        if (touch && !tree.dead) {
+            if (!sprite.playing || sprite.totalFrames === 2) {
+                sprite.textures = (touch === 'right' ? ANI_SHAKE_LEFT : ANI_SHAKE_RIGHT);
+                sprite.play();
             }
+            const crown = tree.children[1];
+
+            tree.x = tree.ox;
+
+            if (skakTimer % 20 >= 10) {
+                tree.x += 3;
+            } else {
+                tree.x -= 3;
+            }
+            skakTimer += 1;
+
+            crown.shaking = true;
+
+            if (skakTimeOut === undefined) {
+                skakTimeOut = setTimeout(() => {
+                    crown.texture = CROWN_TEXTURES[crown.textureName]._0;
+                    crown.textureState = 0;
+
+                    // clearing
+                    clearTimeout(skakTimeOut);
+                    skakTimeOut = undefined;
+                    interactKeys = interactKeys.filter(a => a !== key);
+                    skakningDone = true;
+                    setTimeout(() => {
+                        crown.shaking = false;
+                        skakningDone = false;
+                    }, SHAKECOOLDOWN * 1000);
+                }, DEFAULT_SHAKETIME * 1000);
+            }
+
+        } else {
+            currentLevel.trees.forEach(tree => tree.children[1].shaking = false);
+            clearTimeout(skakTimeOut);
+            skakTimeOut = undefined;
+            sprite.stop();
+            sprite.texture = IDLE_TEXTURE;
         }
-        
     }
 }
 

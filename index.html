@@ -1,45 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>HTML 5 Boilerplate</title>
 
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-
-    <link rel="stylesheet" href="./style.css">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.1.3/pixi.min.js"></script>
-    <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
-
-    <script src="https://www.kkkk1000.com/js/bump.js"></script>
-    <script src="./javascript/particle-emitter.js"></script>
-
-  </head>
-
-  
-
-  <body>
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/intro.css">
 
 
+</head>
 
+<body>
+    <div class="image">
+        <img class="fade-in" src="./imgs/weep.png" alt="logo">
+    </div>
 
+    <script>
 
-
-
-    <script src="./javascript/setup-vars.js"></script> 
-    <script src="./javascript/objects.js"></script> 
-    <script src="./javascript/snow.js"></script> 
-    <script src="./javascript/level-loader.js"></script> 
-    <script src="./javascript/movement-interaction.js"></script> 
-    <script src="./javascript/main.js"></script> 
-    <script src="./javascript/snow-particles.js"></script> 
-
-
-  </body>
-
+        window.onload = (event) => {
+          setTimeout(() => {
+            window.location.replace("./menu.html");
+          }, 10 * 1000);
+        };
+    
+      </script>
+</body>
 
 </html>

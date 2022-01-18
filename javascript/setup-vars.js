@@ -12,6 +12,8 @@ const DEFAULT_SHAKETIME = 3;
 const SHAKECOOLDOWN = 1;
 
 
+const WALL_SIZE = 48;
+
 
 const IDLE_TEXTURE = PIXI.Texture.from('sprites/char1.png');
 const ANI_WALK = [
@@ -51,6 +53,7 @@ const CROWN_TEXTURES = {
 
 
 
+const TREE_DEAD_STATE = 4;
 
 const PARTICLE_UPPER_LIMIT_Y = 10;
 const PARTICLE_UPPER_LIMIT_X = 2;
@@ -77,8 +80,6 @@ var currentLevel = {
 var skakTimer = 0;
 var skakTimeOut = undefined;
 var skakningDone = false;
-
-
 
 
 

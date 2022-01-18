@@ -1,5 +1,4 @@
 
-const WALL_SIZE = 48;
 
 function addTrees(treePositions) {
     const trees = [];

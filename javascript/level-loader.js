@@ -33,7 +33,7 @@ const LEVELS = [
         "id": "test",
         "title": "TESTING !!!",
         "wallPositions": [
-            { "x1": 100, "y1": 100, "x2": 164, "y2": 100 }
+            { "x1": 100, "y1": 100, "x2": 100 + (100 * WALL_SIZE), "y2": 100 }
         ],
         "treePositions": [
             { "x": 500, "y": 500 },
