@@ -14,9 +14,7 @@ sprite.loop = true;
 app.stage.addChild(sprite);
 
 var levelLoaded = false;
-
-
-
+var gamePaused = false;
 
 
 
@@ -30,7 +28,7 @@ var olof;
 
 app.ticker.add(update);
 
-loadLevel('test')
+loadLevel('test');
 
 
 setInterval(updateTrees, 500);
@@ -38,8 +36,26 @@ setInterval(updateTrees, 500);
 
 
 function update() {
-    if (!levelLoaded) return;
+    if (isGamePaused()) return;
 
     updateMovementInteraction();
     updateOlof();
+}
+
+
+
+function pauseGame() {
+    gamePaused = true;
+    skakTimeOut?.pause();
+    $('.pause-screen').show();
+}
+
+function resumeGame() {
+    $('.pause-screen').hide();
+    gamePaused = false;
+    skakTimeOut?.resume();
+}
+
+function isGamePaused() {
+    return (!levelLoaded || gamePaused);
 }

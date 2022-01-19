@@ -53,6 +53,7 @@ const test = PIXI.Texture.from('sprites/snowflake.png');
 
 
 app.ticker.add(i => {
+    if (isGamePaused()) return;
     for (let particle of particles) {
         if (particle.y > 0) particle.x += particle.vx
         particle.y += particle.vy

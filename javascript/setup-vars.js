@@ -129,6 +129,9 @@ $(document).keydown(function (event) {
     const key = event.key.toLowerCase();
     if (!moveKeys.includes(key) && MOVEMENT_KEYS.includes(key)) moveKeys.push(key);
     if (window.event.repeat || INTERACTION_KEYS.includes(key)) if (!interactKeys.includes(key) && INTERACTION_KEYS.includes(key) && !skakningDone) interactKeys.push(key);
+
+    if (key === 'escape') gamePaused ? resumeGame() : pauseGame();
+
 });
 
 $(document).keyup(function (event) {
@@ -141,3 +144,26 @@ $(document).keyup(function (event) {
 function random(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
+
+
+
+var Timer = function (callback, delay) {
+    var timerId, start, remaining = delay;
+
+    this.pause = function () {
+        window.clearTimeout(timerId);
+        timerId = null;
+        remaining -= Date.now() - start;
+    };
+
+    this.resume = function () {
+        if (timerId) {
+            return;
+        }
+
+        start = Date.now();
+        timerId = window.setTimeout(callback, remaining);
+    };
+
+    this.resume();
+};

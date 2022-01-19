@@ -4,7 +4,7 @@
 
 function updateTrees() {
 
-
+    if (isGamePaused()) return;
 
     for (const tree of currentLevel.trees) {
         const crown = tree.children[1];
@@ -25,8 +25,5 @@ function updateTrees() {
 
     }
     
-
-
-
 }
 

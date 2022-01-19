@@ -70,19 +70,10 @@ function interact(key) {
             crown.shaking = true;
 
             if (skakTimeOut === undefined) {
-                skakTimeOut = setTimeout(() => {
-
-                    
+                skakTimeOut = new Timer(() => {
                     generateFallParticles(tree, crown.textureState);
                     crown.texture = CROWN_TEXTURES[crown.textureName]._0;
                     crown.textureState = 0;
-
-
-
-                    
-
-
-
 
 
                     // clearing
@@ -124,6 +115,7 @@ function generateFallParticles(tree, particle_amount) {
     }
 
     const snowFallInterval = setInterval(function() {
+        if (isGamePaused()) return;
         particles.forEach(particle => {
             particle.y += (((tree.y + tree.children[0].height / 2) - (particle.y + particle.height)) / 70) + random(1, 2.5);// random(2, 5);
 

@@ -29,3 +29,34 @@ html, body {
     /* Non-prefixed version, currently
                                     supported by Chrome, Edge, Opera and Firefox */
 }
+
+
+
+.slider {
+    -webkit-appearance: none;
+    width: 30%;
+    height: 5px;
+    border-radius: 5px;
+    background: white;
+    outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 35px;
+    border-radius: 5px;
+    background: white;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 35px;
+    border-radius: 5px;
+    background: white;
+    cursor: pointer;
+}

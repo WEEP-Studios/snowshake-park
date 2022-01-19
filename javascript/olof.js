@@ -39,12 +39,12 @@ function loadOlof(data) {
     app.stage.addChild(olof);
 }
 
-function moveOlof(olof, x, y) {
+function moveOlof(x, y) {
 
-    for (const wall of currentLevel.walls) {
-        if (b.hit({ x: olof.x + x, y: olof.y + y - (olof.height / 2) }, wall)) return;
-        if (b.hit({ x: olof.x + x, y: olof.y + y + (olof.height / 2) }, wall)) return;
-    }
+    // for (const wall of currentLevel.walls) {
+    //     if (b.hit({ x: olof.x + x, y: olof.y + y - (olof.height / 2) }, wall)) return;
+    //     if (b.hit({ x: olof.x + x, y: olof.y + y + (olof.height / 2) }, wall)) return;
+    // }
 
     olof.x += x;
     olof.y += y;
@@ -59,32 +59,43 @@ function bounceOlofTo(x, y) {
 
     olof.isBounce = true;
 
+    const a  = -0.06;
+    const c = (olof.x + x) / 2;
+    const k = y - (a * (Math.pow(x - c, 2)));
+
+    console.log(`f(x) = ${a} * (x - ${c})^2 + ${k}`);
+    console.log(`B = (${x}, ${y})`);
+    console.log(`A = (${olof.x}, ${olof.y})`);
+
     const dx = x - olof.x;
     const dy = y- olof.y;
 
     const timesToUpdate = dx / 0.3;
 
     let times = 0;
+    
 
     const olofBouncer = setInterval(function() {
+        if (isGamePaused()) return;
 
-        olof.x += dx / timesToUpdate * times;
+        const moveX = dx / timesToUpdate * times;
+        moveOlof(moveX, 0);
 
-        console.log(olof.x, olof.y, x, y);
+        moveOlof(0, -getBounceY(a, c, k, olof.x + moveX));
 
         times++;
 
-        if (olof.x >= x) {
-            olof.isBounce = false;
-            clearInterval(olofBouncer);
-        }
+        // if (olof.x >= x) {
+        //     olof.isBounce = false;
+        //     clearInterval(olofBouncer);
+        // }
 
     }, 30)
 
 }
 
-function getBounceY(x, height) {
-    return -(0.3 * x * x + height);
+function getBounceY(a, c, k, x) {
+    return a * Math.pow(x - c, 2) + k;
 }
 
 
@@ -101,8 +112,8 @@ function updateOlof() {
     const velocityX = Math.cos(angle) * OLOFSPEED;
 
     if (doesOlofSeeMe(center_x, center_y, x, y, dx, dy, angle)) {
-        moveOlof(olof, velocityX, velocityY);
-        // if (!olof.isBounce) bounceOlofTo(x, y);
+        // moveOlof(olof, velocityX, velocityY);
+        if (!olof.isBounce) bounceOlofTo(x, y);
     }
 }
 
