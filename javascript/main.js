@@ -3,6 +3,8 @@ const app = new PIXI.Application({
 });
 document.body.appendChild(app.view);
 
+PIXI.settings.ROUND_PIXELS = true;
+
 let b = new Bump(PIXI);
 
 const sprite = new PIXI.AnimatedSprite(ANI_WALK);

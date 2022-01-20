@@ -30,12 +30,15 @@ html, body {
                                     supported by Chrome, Edge, Opera and Firefox */
 }
 
+* {
+    image-rendering: pixelated; /* viktigt */
+}
+
 .slider {
     appearance: none;
     -webkit-appearance: none;
     width: 30%;
     height: 5px;
-    border-radius: 5px;
     background: white;
     outline: none;
     border: 0;
@@ -46,7 +49,6 @@ html, body {
     appearance: none;
     width: 15px;
     height: 35px;
-    border-radius: 5px;
     background: white;
     cursor: pointer;
     border: 0;
@@ -57,8 +59,118 @@ html, body {
     appearance: none;
     width: 15px;
     height: 35px;
-    border-radius: 5px;
     background: white;
     cursor: pointer;
     border: 0;
 }
+
+
+
+
+#start-btn {
+    background: url('../imgs/btn/start.png');
+}
+
+#start-btn:hover {
+    background: url('../imgs/btn/start_hover.png');
+}
+
+#info-btn {
+    background: url('../imgs/btn/infocred.png');
+}
+
+#info-btn:hover {
+    background: url('../imgs/btn/infocred_hover.png');
+}
+
+#tutorial-btn {
+    background: url('../imgs/btn/tutorial.png')
+}
+
+#tutorial-btn:hover {
+    background: url('../imgs/btn/tutorial_hover.png');
+}
+
+#levels-btn {
+    background: url('../imgs/btn/levels.png');
+}
+
+#levels-btn:hover {
+    background: url('../imgs/btn/levels_hover.png');
+}
+
+#endless-btn {
+    background: url('../imgs/btn/endless.png');
+}
+
+#endless-btn:hover {
+    background: url('../imgs/btn/endless_hover.png');
+}
+
+#level-go-back-btn {
+    background: url('../imgs/btn/back.png');
+    position: absolute;
+    bottom: 20%;
+    left: calc(50% - 100px);
+    transform: scale(1);
+}
+
+#level-go-back-btn:hover {
+    background: url('../imgs/btn/back_hover.png');
+}
+
+
+
+/* GAME */
+
+#exit-btn {
+    background: url('../imgs/btn/exit.png');
+}
+
+#exit-btn:hover {
+    background: url('../imgs/btn/exit_hover.png');
+}
+
+#settings-btn {
+    background: url('../imgs/btn/settings.png');
+}
+
+#settings-btn:hover {
+    background: url('../imgs/btn/settings_hover.png');
+}
+
+#resume-btn {
+    background: url('../imgs/btn/resume.png');
+}
+
+#resume-btn:hover {
+    background: url('../imgs/btn/resume_hover.png');
+}
+
+/* ! GAME */
+
+
+
+
+
+.img-button-link {
+    transform: scale(1.2);
+    width: 200px;
+    height: 100px;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    display: inline-block;
+}
+
+.start-option {
+    width: 30%;
+    margin-top: auto;
+    margin-bottom: auto;
+    height: 57px;
+}
+
+
+
+
+

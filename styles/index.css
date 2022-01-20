@@ -21,7 +21,7 @@ body, html {
 .btn-link, #play-game-text, .btn-gamemode {
     border: 2px solid white;
     color: white;
-    
+
     padding: 15px 25px;
 
     border-top-right-radius: 20px;
@@ -42,15 +42,13 @@ body, html {
     position: absolute;
     background-color: white;
     color: black;
-    height: 10%;
+    height: 15%;
     width: 50%;
 
     justify-content: space-evenly;
 
-    border-radius: 20px;
-
     left: 25%;
-    top: calc(50% - 11%);
+    top: calc(50% - 1%);
 }
 
 .open-gamemode-chooser {
@@ -64,9 +62,11 @@ body, html {
         width: 0%;
         height: 0%;
     }
+
     50% {
         height: 10%;
     }
+
     100% {
         width: 50%;
     }
@@ -75,7 +75,7 @@ body, html {
 .btn-gamemode {
     border: 2px solid black;
     color: black;
-    
+
     padding: 10px 20px;
 
     border-top-right-radius: 20px;
@@ -96,6 +96,7 @@ body, html {
 
 
 .slider-container {
+    display: none;
     position: absolute;
     bottom: 3%;
     left: 1%;
@@ -114,13 +115,15 @@ body, html {
 }
 
 .level {
+    font-size: 30px;
+    font-weight: bolder;
     height: 1%;
-    width: 50px;
+    width: 85px;
     text-align: center;
-    border: 1px solid white;
+    border: 8px solid white;
     padding: 10px;
     cursor: pointer;
-    transition: transform .2s ;
+    transition: transform .2s;
 }
 
 .level:hover {
@@ -130,6 +133,9 @@ body, html {
 .levels {
     display: none;
 }
+
+
+
 
 /* INTRO */
 

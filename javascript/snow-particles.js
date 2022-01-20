@@ -15,7 +15,8 @@ const reset = p => {
 // Generate a particle set based on a given texture
 const genParticles = (t) =>
     new Array(PARTICLE_AMOUNT).fill().map(p => {
-        const SIZE = floored(PARTICLE_MAX_SIZE) + PARTICLE_MIN_SIZE
+        // const SIZE = floored(PARTICLE_MAX_SIZE) + PARTICLE_MIN_SIZE
+        const SIZE = VALID_PARTICLE_SIZES[random(0, VALID_PARTICLE_SIZES.length)];
         p = new PIXI.Sprite.from('sprites/snowflake.png')
         p.size = SIZE
         p.vx = floored(PARTICLE_UPPER_LIMIT_X) - PARTICLE_UPPER_LIMIT_X

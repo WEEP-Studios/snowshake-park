@@ -212,6 +212,8 @@ function fallOver(time) {
     frame = 0;
     const FRAME_TIME = 120;
 
+    timeouts.skakTimeOut?.cancel(); timeouts.skakTimeOut = undefined;
+
     const reset = function() {
         fallenOver = false;
         sprite.texture = IDLE_TEXTURE;

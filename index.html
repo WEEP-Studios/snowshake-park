@@ -21,10 +21,50 @@
     console.log(page);
 
 
+    var images = [];
+    function preload() {
+        for (var i = 0; i < arguments.length; i++) {
+            images[i] = new Image();
+            images[i].src = preload.arguments[i];
+        }
+    }
+
+    preload(
+        './imgs/btn/start.png',
+        './imgs/btn/start_hover.png',
+        './imgs/btn/infocred.png',
+        './imgs/btn/infocred_hover.png',
+        './imgs/btn/tutorial.png',
+        './imgs/btn/tutorial_hover.png',
+        './imgs/btn/levels.png',
+        './imgs/btn/levels_hover.png',
+        './imgs/btn/endless.png',
+        './imgs/btn/endless_hover.png',
+
+        './imgs/btn/exit.png',
+        './imgs/btn/exit_hover.png',
+        './imgs/btn/settings.png',
+        './imgs/btn/settings_hover.png',
+        './imgs/btn/resume.png',
+        './imgs/btn/resume_hover.png',
+
+        './imgs/btn/back.png',
+        './imgs/btn/back_hover.png',
+    )
+
+
     function showLevels() {
         $('.menu').hide();
         $('#choose-gamemode').hide();
         $('.levels').show();
+        $('.slider-container').show();
+    }
+
+    function showMenu() {
+        $('.levels').hide();
+        $('#choose-gamemode').hide();
+        $('.slider-container').show();
+        $('.menu').show();
     }
 
     function playLevel(level) {
@@ -34,39 +74,47 @@
     window.onload = (event) => {
 
         var gameLogoEffect = new Audio('./music/WeepStudiosEffect.mp3');
+        gameLogoEffect.volume = 0.5;
 
         var menuMusic = new Audio('./music/menu-music.mp3');
         menuMusic.loop = true;
 
+
         if (!page) {
             $('.intro').show();
-            $('.slider-container').hide();
 
             setTimeout(() => {
                 $('.intro').hide();
                 $('.slider-container').show();
                 $('.menu').show();
-                menuMusic.play();
+                startMenuMusic();
             }, 5 * 1000);
 
             setTimeout(() => {
                 gameLogoEffect.play();
             }, 1 * 1000);
         } else if (page === 'title') {
-            $('.menu').show();
-            menuMusic.play();
+            showMenu();
+            startMenuMusic();
         } else if (page === 'levels') {
             showLevels();
+            startMenuMusic();
+        }
+
+        function startMenuMusic() {
             menuMusic.play();
+            if (menuMusic.paused) {
+                $('.volume-icon').attr('src', './imgs/volume_muted.png');
+            }
         }
 
 
-        $('#btn-play-game').on('click', function() {
+        $('#start-btn').on('click', function () {
             $('#choose-gamemode').css('display', 'flex');
             $('#choose-gamemode').addClass('open-gamemode-chooser');
         });
 
-        $('.volume-icon').on('click', function() {
+        $('.volume-icon').on('click', function () {
             if (menuMusic.paused) {
                 menuMusic.play();
                 this.src = './imgs/volume.png';
@@ -84,6 +132,10 @@
         slider.oninput = function () {
             menuMusic.volume = this.value;
         }
+
+        // $('.img-button-link').on('mouseenter', function() {
+        //     this.src = this.src.replace('.png', '_hover.png');
+        // })
 
     };
 
@@ -124,13 +176,12 @@
                 <div class="snowflake"><img src="./sprites/snowflake.png"></div>
             </div>
             <div class="buttons">
-                <img src="./imgs/logo.png" alt="Snowshake Park">
-                <br><br><br>
-                <a class="btn-link" id="btn-play-game">Play Game</a>
-                <br><br><br><br>
-                <a class="btn-link">Information</a>
-                <br><br><br><br>
-                <a class="btn-link">Credits</a>
+                <img src="./imgs/logo.png" alt="Snowshake Park"  style="transform: scale(1.6);">
+                <br><br><br><br><br>
+
+                <div id="start-btn" class="img-button-link" style="transform: scale(1.5);"> </div>
+                <br>
+                <div id="info-btn" class="img-button-link" style="transform: scale(1.5);"> </div>
             </div>
         </div>
 
@@ -138,9 +189,13 @@
 
         <div id="choose-gamemode">
 
-            <a class="btn-gamemode">Tutorial</a>
+            <!-- <a class="btn-gamemode">Tutorial</a>
             <a class="btn-gamemode" onclick="showLevels();">Levels</a>
-            <a class="btn-gamemode">Endless</a>
+            <a class="btn-gamemode">Endless</a> -->
+
+            <div id="tutorial-btn" class="start-option img-button-link"> </div>
+            <div id="levels-btn" class="start-option img-button-link" onclick="showLevels();"> </div>
+            <div id="endless-btn" class="start-option img-button-link"> </div>
 
         </div>
 
@@ -155,8 +210,10 @@
 
             </table>
 
-        </div>
+            <div id="level-go-back-btn" class="img-button-link" onclick="showMenu();"> </div>
 
+
+        </div>
 
         <div class="slider-container">
             <img class="volume-icon" src="./imgs/volume.png">

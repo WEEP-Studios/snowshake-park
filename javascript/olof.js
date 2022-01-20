@@ -127,8 +127,8 @@ function updateOlof() {
     const y = sprite.y;
     const center_x = olofCircle.x;
     const center_y = olofCircle.y;
-    const dx = sprite.x - olof.x;
-    const dy = sprite.y - olof.y;
+    const dx = sprite.x - (olof.x - (olof.width / 2));
+    const dy = sprite.y - (olof.y - (olof.height / 2));
     const angle = Math.atan2(dy, dx)
     const velocityY = Math.sin(angle) * OLOFSPEED;
     const velocityX = Math.cos(angle) * OLOFSPEED;
@@ -137,8 +137,6 @@ function updateOlof() {
         if (!olof.isBounce) bounceOlofTo(olof.x + (velocityX * 10), (olof.y + velocityY * 10));
     }
 }
-
-
 
 function doesOlofSeeMe(center_x, center_y, x, y, dx, dy, angle) {
     console.log();
@@ -219,8 +217,9 @@ function calcPointsCirc(cx, cy, rad, dashLength) {
 }
 
 
-
-
+// raycastsss.forEach(ray => {
+//     ray.destroy();
+// });
 // var raycastsss = [];
 // let test = new PIXI.Sprite.from('sprites/error.png');
 // test.x = point.x;
