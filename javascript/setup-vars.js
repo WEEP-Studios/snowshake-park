@@ -2,11 +2,13 @@
 const WIDTH = 1280;
 const HEIGHT = 720;
 
-
+var timeouts = {
+    skakTimeOut: undefined,
+    fallenOverTimeOut: undefined,
+}
 
 
 var skakTimer = 0;
-var skakTimeOut = undefined;
 var skakningDone = false;
 
 const DEFAULT_SHAKETIME = 3;

@@ -10,6 +10,11 @@
 function loadLevel(id) {
     const level = LEVELS.find(level => level.id === id);
 
+    if (!level) {
+        console.error(`Level "${id}" does not exist!`);
+        return;
+    }
+
     if (level.olof?.enabled) {
         loadOlof(level.olof);
     }
@@ -104,6 +109,37 @@ const LEVELS = [
             "enabled": false,
             "radius": 200,
             "olofView": false
+        },
+        "playerSpeed": 4,
+    },
+
+
+
+    {
+        "id": "level_1",
+        "title": "level 2 (test)",
+        "wallPositions": [],
+        "treePositions": [
+            { "x": 592, "y": 323 },
+            { "x": 798, "y": 598 },
+            { "x": 1003, "y": 283 },
+        ],
+        "playerSpeed": 4,
+    },
+
+    {
+        "id": "level_2",
+        "title": "level 2 (test)",
+        "wallPositions": [],
+        "treePositions": [
+            { "x": 328, "y": 420 },
+            { "x": 255, "y": 319 },
+        ],
+        "olof": {
+            "enabled": true,
+            "spawn": { x: 900, y: 200 },
+            "radius": 250,
+            "speed": 5
         },
         "playerSpeed": 4,
     }

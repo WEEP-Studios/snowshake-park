@@ -95,7 +95,7 @@ body, html {
 }
 
 
-.menu-slider-container {
+.slider-container {
     position: absolute;
     bottom: 3%;
     left: 1%;
@@ -105,6 +105,7 @@ body, html {
 .slider {
     width: 20%;
     margin-left: 3%;
+    margin-top: 1.15%;
 }
 
 .volume-icon {
@@ -114,7 +115,7 @@ body, html {
 
 .level {
     height: 1%;
-    width: 2%;
+    width: 50px;
     text-align: center;
     border: 1px solid white;
     padding: 10px;
@@ -126,7 +127,9 @@ body, html {
     transform: scale(1.1);
 }
 
-
+.levels {
+    display: none;
+}
 
 /* INTRO */
 

@@ -39,6 +39,8 @@ function loadOlof(data) {
     app.stage.addChild(olof);
 }
 
+var olofMoveTimes = 0;
+
 function moveOlof(x, y) {
 
     // for (const wall of currentLevel.walls) {
@@ -51,8 +53,15 @@ function moveOlof(x, y) {
     olofCircle.x = x;
     olofCircle.y = y;
 
-    updateMask();
+    if (olofMoveTimes % 4 === 0) {
+        let test = new PIXI.Sprite.from('sprites/error.png');
+        test.x = olof.x;
+        test.y = olof.y;
+        app.stage.addChild(test);
+    }
 
+    updateMask();
+    olofMoveTimes++;
 }
 
 function bounceOlofTo(x, y) {
@@ -68,17 +77,20 @@ function bounceOlofTo(x, y) {
     const x3 = (olof.x + x) / 2;
     const y3 = olof.y - 40;
 
+    // const y3 = olof.y - Math.abs(olof.x - sprite.x) / 2;
+
+
 
     const denom = (x1 - x2) * (x1 - x3) * (x2 - x3);
-    const A     = (x3 * (y2 - y1) + x2 * (y1 - y3) + x1 * (y3 - y2)) / denom;
-    const B     = (x3*x3 * (y1 - y2) + x2*x2 * (y3 - y1) + x1*x1 * (y2 - y3)) / denom;
-    const C     = (x2 * x3 * (x2 - x3) * y1 + x3 * x1 * (x3 - x1) * y2 + x1 * x2 * (x1 - x2) * y3) / denom;
+    const A = (x3 * (y2 - y1) + x2 * (y1 - y3) + x1 * (y3 - y2)) / denom;
+    const B = (x3 * x3 * (y1 - y2) + x2 * x2 * (y3 - y1) + x1 * x1 * (y2 - y3)) / denom;
+    const C = (x2 * x3 * (x2 - x3) * y1 + x3 * x1 * (x3 - x1) * y2 + x1 * x2 * (x1 - x2) * y3) / denom;
 
     const getY = function (x1) {
         return (A * Math.pow(x1, 2) + B * x1 + C);
     }
 
-    const directionRight = (olof.x - x ) < 0;
+    const directionRight = (olof.x - x) < 0;
 
 
     const moveWith = Math.abs(olof.x - x) / 50;
@@ -98,6 +110,13 @@ function bounceOlofTo(x, y) {
             olof.isBounce = false;
         }
 
+        if (b.hit(olof, sprite)) {
+            moveOlof(random(0, WIDTH), random(0, HEIGHT));
+            clearInterval(olofBouncer);
+            olof.isBounce = false;
+            fallOver(2);
+        }
+
     }, 8);
 
 }
@@ -115,22 +134,18 @@ function updateOlof() {
     const velocityX = Math.cos(angle) * OLOFSPEED;
 
     if (doesOlofSeeMe(center_x, center_y, x, y, dx, dy, angle)) {
-        // moveOlof(olof, velocityX, velocityY);
-        if (!olof.isBounce) {
-            bounceOlofTo(olof.x + (velocityX * 10), (olof.y + velocityY * 10));
-
-            // for (let i = 0; i < Math.abs(olof.x - x); i++) {
-            //     bounceOlofTo(x, y);          
-            // }
-
-        }
+        if (!olof.isBounce) bounceOlofTo(olof.x + (velocityX * 10), (olof.y + velocityY * 10));
     }
 }
 
 
 
 function doesOlofSeeMe(center_x, center_y, x, y, dx, dy, angle) {
-    if (isPointInCircle(center_x, center_y, OLOF_RADIUS, x, y)) {
+    console.log();
+    if (isPointInCircle(center_x, center_y, OLOF_RADIUS, x, y)
+        || isPointInCircle(center_x, center_y, OLOF_RADIUS, (x + sprite.width), (y + sprite.height))
+        || isPointInCircle(center_x, center_y, OLOF_RADIUS, (x + sprite.width), y)
+        || isPointInCircle(center_x, center_y, OLOF_RADIUS, x, (y + sprite.height))) {
         const points = [];
         const hyp = Math.sqrt((dx * dx) + (dy * dy));
 

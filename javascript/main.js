@@ -20,40 +20,41 @@ var gamePaused = false;
 
 var olof;
 
-
-
-
-
-
-
 app.ticker.add(update);
 
-loadLevel('test');
+
+
+
+
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const level = urlParams.get('level');
+
+if (level) loadLevel(level);
+
 
 
 setInterval(updateTrees, 500);
-
-
 
 function update() {
     if (isGamePaused()) return;
 
     if (!fallenOver) updateMovementInteraction();
-    updateOlof();
+    if (olof) updateOlof();
 }
 
 
 
 function pauseGame() {
     gamePaused = true;
-    skakTimeOut?.pause();
+    Object.values(timeouts).forEach(timeout => timeout?.pause());
     $('.pause-screen').show();
 }
 
 function resumeGame() {
     $('.pause-screen').hide();
     gamePaused = false;
-    skakTimeOut?.resume();
+    Object.values(timeouts).forEach(timeout => timeout?.resume());
 }
 
 function isGamePaused() {

@@ -34,8 +34,8 @@ function updateMovementInteraction() {
     if (moveKeys.length === 0 && interactKeys.length === 0) {
         sprite.stop();
         sprite.texture = IDLE_TEXTURE;
-        clearTimeout(skakTimeOut);
-        skakTimeOut = undefined;
+        timeouts.skakTimeOut?.cancel();
+        timeouts.skakTimeOut = undefined;
     }
 }
 
@@ -69,16 +69,16 @@ function interact(key) {
 
             crown.shaking = true;
 
-            if (skakTimeOut === undefined) {
-                skakTimeOut = new Timer(() => {
+            if (timeouts.skakTimeOut === undefined) {
+                timeouts.skakTimeOut = new Timer(() => {
                     generateFallParticles(tree, crown.textureState);
                     crown.texture = CROWN_TEXTURES[crown.textureName]._0;
                     crown.textureState = 0;
 
 
                     // clearing
-                    clearTimeout(skakTimeOut);
-                    skakTimeOut = undefined;
+                    timeouts.skakTimeOut?.cancel();
+                    timeouts.skakTimeOut = undefined;
                     interactKeys = interactKeys.filter(a => a !== key);
                     skakningDone = true;
                     setTimeout(() => {
@@ -90,9 +90,9 @@ function interact(key) {
 
         } else {
             currentLevel.trees.forEach(tree => tree.children[1].shaking = false);
-            if (skakTimeOut) {
-                skakTimeOut.cancel();
-                skakTimeOut = undefined;
+            if (timeouts.skakTimeOut) {
+                timeouts.skakTimeOut?.cancel();
+                timeouts.skakTimeOut = undefined;
             }
             sprite.stop();
             sprite.texture = IDLE_TEXTURE;
@@ -207,9 +207,10 @@ function updateMask() {
 
 
 function fallOver(time) {
+    sprite.stop();
     fallenOver = true;
     frame = 0;
-    const FRAME_TIME = 150;
+    const FRAME_TIME = 120;
 
     const reset = function() {
         fallenOver = false;
@@ -220,9 +221,10 @@ function fallOver(time) {
         if (isGamePaused()) return;
         if (frame === 3) {
             clearInterval(animation);
-            setTimeout(() => {
+
+            timeouts.fallenOverTimeOut = new Timer(() => {
                 reset();
-            }, time * 1000);
+            }, time * 1000)
             return;
         }
         sprite.texture = ANI_FALL_OVER[frame];

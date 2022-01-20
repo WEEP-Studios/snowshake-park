@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>HTML 5 Boilerplate</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script src="./javascript/libs/jcurry.min.js"></script>
+
 
     <link rel="stylesheet" href="./styles/main.css">
     <link rel="stylesheet" href="./styles/index.css">
@@ -26,6 +27,10 @@
         $('.levels').show();
     }
 
+    function playLevel(level) {
+        window.location.replace(`./game.html?level=${level}`);
+    }
+
     window.onload = (event) => {
 
         var gameLogoEffect = new Audio('./music/WeepStudiosEffect.mp3');
@@ -35,9 +40,11 @@
 
         if (!page) {
             $('.intro').show();
+            $('.slider-container').hide();
 
             setTimeout(() => {
                 $('.intro').hide();
+                $('.slider-container').show();
                 $('.menu').show();
                 menuMusic.play();
             }, 5 * 1000);
@@ -48,14 +55,15 @@
         } else if (page === 'title') {
             $('.menu').show();
             menuMusic.play();
+        } else if (page === 'levels') {
+            showLevels();
+            menuMusic.play();
         }
 
 
         $('#btn-play-game').on('click', function() {
-
             $('#choose-gamemode').css('display', 'flex');
             $('#choose-gamemode').addClass('open-gamemode-chooser');
-
         });
 
         $('.volume-icon').on('click', function() {
@@ -124,11 +132,9 @@
                 <br><br><br><br>
                 <a class="btn-link">Credits</a>
             </div>
-            <div class="menu-slider-container">
-                <img class="volume-icon" src="./imgs/volume.png">
-                <input type="range" min="0" max="1" value="1" step="0.01" class="slider" id="myRange">
-            </div>
         </div>
+
+
 
         <div id="choose-gamemode">
 
@@ -143,21 +149,18 @@
             <table style="border-spacing: 10px;">
 
                 <tr>
-                    <td class="level"> 1 </td>
-                    <td class="level"> 2 </td>
-                    <td class="level"> 3 </td>
-                    <td class="level"> 4 </td>
-                </tr>
-
-                <tr>
-                    <td class="level"> 5 </td>
-                    <td class="level"> 6 </td>
-                    <td class="level"> 7 </td>
-                    <td class="level"> 8 </td>
+                    <td class="level" onclick="playLevel('level_1')"> 1 </td>
+                    <td class="level" onclick="playLevel('level_2')"> 2 </td>
                 </tr>
 
             </table>
 
+        </div>
+
+
+        <div class="slider-container">
+            <img class="volume-icon" src="./imgs/volume.png">
+            <input type="range" min="0" max="1" value="1" step="0.01" class="slider" id="myRange">
         </div>
 
     </div>
