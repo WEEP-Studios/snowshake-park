@@ -46,10 +46,10 @@ function moveOlof(x, y) {
     //     if (b.hit({ x: olof.x + x, y: olof.y + y + (olof.height / 2) }, wall)) return;
     // }
 
-    olof.x += x;
-    olof.y += y;
-    olofCircle.x += x;
-    olofCircle.y += y;
+    olof.x = x;
+    olof.y = y;
+    olofCircle.x = x;
+    olofCircle.y = y;
 
     updateMask();
 
@@ -59,45 +59,48 @@ function bounceOlofTo(x, y) {
 
     olof.isBounce = true;
 
-    const a  = -0.06;
-    const c = (olof.x + x) / 2;
-    const k = y - (a * (Math.pow(x - c, 2)));
+    const startX = JSON.parse(JSON.stringify(olof.x));
 
-    console.log(`f(x) = ${a} * (x - ${c})^2 + ${k}`);
-    console.log(`B = (${x}, ${y})`);
-    console.log(`A = (${olof.x}, ${olof.y})`);
+    const x1 = x;
+    const y1 = y;
+    const x2 = olof.x;
+    const y2 = olof.y;
+    const x3 = (olof.x + x) / 2;
+    const y3 = olof.y - 40;
 
-    const dx = x - olof.x;
-    const dy = y- olof.y;
 
-    const timesToUpdate = dx / 0.3;
+    const denom = (x1 - x2) * (x1 - x3) * (x2 - x3);
+    const A     = (x3 * (y2 - y1) + x2 * (y1 - y3) + x1 * (y3 - y2)) / denom;
+    const B     = (x3*x3 * (y1 - y2) + x2*x2 * (y3 - y1) + x1*x1 * (y2 - y3)) / denom;
+    const C     = (x2 * x3 * (x2 - x3) * y1 + x3 * x1 * (x3 - x1) * y2 + x1 * x2 * (x1 - x2) * y3) / denom;
+
+    const getY = function (x1) {
+        return (A * Math.pow(x1, 2) + B * x1 + C);
+    }
+
+    const directionRight = (olof.x - x ) < 0;
+
+
+    const moveWith = Math.abs(olof.x - x) / 50;
 
     let times = 0;
-    
 
-    const olofBouncer = setInterval(function() {
+    const olofBouncer = setInterval(() => {
         if (isGamePaused()) return;
 
-        const moveX = dx / timesToUpdate * times;
-        moveOlof(moveX, 0);
+        const move = (directionRight ? startX + times : startX - times);
 
-        moveOlof(0, -getBounceY(a, c, k, olof.x + moveX));
+        moveOlof(move, getY(move));
+        times += moveWith;
 
-        times++;
+        if ((directionRight && olof.x > x) || (!directionRight && olof.x < x)) {
+            clearInterval(olofBouncer);
+            olof.isBounce = false;
+        }
 
-        // if (olof.x >= x) {
-        //     olof.isBounce = false;
-        //     clearInterval(olofBouncer);
-        // }
-
-    }, 30)
+    }, 8);
 
 }
-
-function getBounceY(a, c, k, x) {
-    return a * Math.pow(x - c, 2) + k;
-}
-
 
 
 function updateOlof() {
@@ -113,7 +116,14 @@ function updateOlof() {
 
     if (doesOlofSeeMe(center_x, center_y, x, y, dx, dy, angle)) {
         // moveOlof(olof, velocityX, velocityY);
-        if (!olof.isBounce) bounceOlofTo(x, y);
+        if (!olof.isBounce) {
+            bounceOlofTo(olof.x + (velocityX * 10), (olof.y + velocityY * 10));
+
+            // for (let i = 0; i < Math.abs(olof.x - x); i++) {
+            //     bounceOlofTo(x, y);          
+            // }
+
+        }
     }
 }
 
@@ -191,7 +201,7 @@ function calcPointsCirc(cx, cy, rad, dashLength) {
         i += 2;
     }
     return points;
-} 
+}
 
 
 

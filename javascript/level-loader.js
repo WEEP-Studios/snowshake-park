@@ -87,18 +87,18 @@ const LEVELS = [
         "id": "test",
         "title": "TESTING !!!",
         "wallPositions": [
-            { "x1": 100, "y1": 100, "x2": 100 + (10 * WALL_SIZE), "y2": 100 }
+            // { "x1": 100, "y1": 100, "x2": 100 + (10 * WALL_SIZE), "y2": 100 }
         ],
         "treePositions": [
-            { "x": 500, "y": 500 },
-            { "x": 100, "y": 500 },
-            { "x": 800, "y": 500 },
+            // { "x": 500, "y": 500 },
+            // { "x": 100, "y": 500 },
+            // { "x": 800, "y": 500 },
         ],
         "olof": {
             "enabled": true,
-            "spawn": { x: 200, y: 200 },
+            "spawn": { x: 900, y: 200 },
             "radius": 175,
-            "speed": 1.5
+            "speed": 5
         },
         "night": {
             "enabled": false,

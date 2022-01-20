@@ -38,7 +38,7 @@ setInterval(updateTrees, 500);
 function update() {
     if (isGamePaused()) return;
 
-    updateMovementInteraction();
+    if (!fallenOver) updateMovementInteraction();
     updateOlof();
 }
 

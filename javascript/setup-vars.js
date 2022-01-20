@@ -57,6 +57,11 @@ const ANI_SHAKE_RIGHT = [
     PIXI.Texture.from('sprites/char_shake3_mirror.png'),
     PIXI.Texture.from('sprites/char_shake2_mirror.png')
 ];
+const ANI_FALL_OVER = [
+    PIXI.Texture.from('sprites/char_dmg1.png'),
+    PIXI.Texture.from('sprites/char_dmg2.png'),
+    PIXI.Texture.from('sprites/char_dmg3.png')
+];
 
 
 const CROWN_TEXTURES = {
@@ -111,13 +116,14 @@ var currentLevel = {
     trees: []
 };
 
-var OLOFSPEED = 2.8;
+var OLOFSPEED = 10;
 var OLOF_RADIUS = 175;
 
 var nightData;
 
 var olofCircle, nightPlayerCircle;
 
+var fallenOver;
 
 
 
@@ -155,6 +161,10 @@ var Timer = function (callback, delay) {
         timerId = null;
         remaining -= Date.now() - start;
     };
+
+    this.cancel = function() {
+        window.clearTimeout(timerId);
+    }
 
     this.resume = function () {
         if (timerId) {

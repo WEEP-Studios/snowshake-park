@@ -30,15 +30,15 @@ html, body {
                                     supported by Chrome, Edge, Opera and Firefox */
 }
 
-
-
 .slider {
+    appearance: none;
     -webkit-appearance: none;
     width: 30%;
     height: 5px;
     border-radius: 5px;
     background: white;
     outline: none;
+    border: 0;
 }
 
 .slider::-webkit-slider-thumb {
@@ -49,6 +49,7 @@ html, body {
     border-radius: 5px;
     background: white;
     cursor: pointer;
+    border: 0;
 }
 
 .slider::-moz-range-thumb {
@@ -59,4 +60,5 @@ html, body {
     border-radius: 5px;
     background: white;
     cursor: pointer;
+    border: 0;
 }

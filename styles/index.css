@@ -5,7 +5,7 @@ body, html {
 }
 
 
-.menu {
+.menu, .intro {
     display: none;
 }
 
@@ -18,10 +18,10 @@ body, html {
 }
 
 
-.btn-link {
+.btn-link, #play-game-text, .btn-gamemode {
     border: 2px solid white;
     color: white;
-    ;
+    
     padding: 15px 25px;
 
     border-top-right-radius: 20px;
@@ -30,12 +30,69 @@ body, html {
     text-decoration: none;
 }
 
-.btn-link:hover {
+
+.btn-link:hover, #play-game-text:hover {
     background-color: white;
     color: black;
     border: 2px solid black;
 }
 
+#choose-gamemode {
+    display: none;
+    position: absolute;
+    background-color: white;
+    color: black;
+    height: 10%;
+    width: 50%;
+
+    justify-content: space-evenly;
+
+    border-radius: 20px;
+
+    left: 25%;
+    top: calc(50% - 11%);
+}
+
+.open-gamemode-chooser {
+    animation: open-gamemode-chooser 0.2s linear;
+}
+
+@keyframes open-gamemode-chooser {
+    0% {
+        /* margin-left: calc(50% + 25%);
+        margin-top: calc(50% + 5%); */
+        width: 0%;
+        height: 0%;
+    }
+    50% {
+        height: 10%;
+    }
+    100% {
+        width: 50%;
+    }
+}
+
+.btn-gamemode {
+    border: 2px solid black;
+    color: black;
+    
+    padding: 10px 20px;
+
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+
+    text-decoration: none;
+
+    height: 35%;
+
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.btn-gamemode:hover {
+    background-color: black;
+    color: white;
+}
 
 
 .menu-slider-container {
@@ -52,17 +109,26 @@ body, html {
 
 .volume-icon {
     position: absolute;
-    font-size: 24px;
+    cursor: pointer;
 }
 
+.level {
+    height: 1%;
+    width: 2%;
+    text-align: center;
+    border: 1px solid white;
+    padding: 10px;
+    cursor: pointer;
+    transition: transform .2s ;
+}
+
+.level:hover {
+    transform: scale(1.1);
+}
 
 
 
 /* INTRO */
-
-img {
-    height: 100px;
-}
 
 
 
@@ -217,6 +283,11 @@ img {
     animation-play-state: running, running
 }
 
+.snowflake img {
+    width: 12px;
+    height: 12px;
+}
+
 .snowflake:nth-of-type(0) {
     left: 1%;
     -webkit-animation-delay: 0s, 0s;
@@ -275,4 +346,64 @@ img {
     left: 90%;
     -webkit-animation-delay: 3s, 1.5s;
     animation-delay: 3s, 1.5s
+}
+
+.snowflake:nth-of-type(10) {
+    left: 5%;
+    -webkit-animation-delay: 6.3s, 8.2s;
+    animation-delay: 6.3s, 8.2s
+}
+
+.snowflake:nth-of-type(11) {
+    left: 15%;
+    -webkit-animation-delay: 3.6s, 1.2s;
+    animation-delay: 3.6s, 1.2s;
+}
+
+.snowflake:nth-of-type(12) {
+    left: 25%;
+    -webkit-animation-delay: 7.6s, 1.8s;
+    animation-delay: 7.6s, 1.8s;
+}
+
+.snowflake:nth-of-type(13) {
+    left: 35%;
+    -webkit-animation-delay: 9.2s, 0.5s;
+    animation-delay: 9.2s, 0.5s;
+}
+
+.snowflake:nth-of-type(14) {
+    left: 45%;
+    -webkit-animation-delay: 5.7s, 9.1s;
+    animation-delay: 5.7s, 9.1s;
+}
+
+.snowflake:nth-of-type(15) {
+    left: 55%;
+    -webkit-animation-delay: 2.2s, 8.7s;
+    animation-delay: 2.2s, 8.7s;
+}
+
+.snowflake:nth-of-type(16) {
+    left: 65%;
+    -webkit-animation-delay: 5.2s, 0.2s;
+    animation-delay: 5.2s, 0.2s;
+}
+
+.snowflake:nth-of-type(17) {
+    left: 75%;
+    -webkit-animation-delay: 8s, 1.6s;
+    animation-delay: 8s, 1.6s;
+}
+
+.snowflake:nth-of-type(18) {
+    left: 85%;
+    -webkit-animation-delay: 4.7s, 1.8s;
+    animation-delay: 4.7s, 1.8s;
+}
+
+.snowflake:nth-of-type(19) {
+    left: 95%;
+    -webkit-animation-delay: 8.1s, 0.7s;
+    animation-delay: 8.1s, 0.7s;
 }

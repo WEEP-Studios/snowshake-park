@@ -90,8 +90,10 @@ function interact(key) {
 
         } else {
             currentLevel.trees.forEach(tree => tree.children[1].shaking = false);
-            clearTimeout(skakTimeOut);
-            skakTimeOut = undefined;
+            if (skakTimeOut) {
+                skakTimeOut.cancel();
+                skakTimeOut = undefined;
+            }
             sprite.stop();
             sprite.texture = IDLE_TEXTURE;
         }
@@ -114,7 +116,7 @@ function generateFallParticles(tree, particle_amount) {
         particles.push(particle);
     }
 
-    const snowFallInterval = setInterval(function() {
+    const snowFallInterval = setInterval(function () {
         if (isGamePaused()) return;
         particles.forEach(particle => {
             particle.y += (((tree.y + tree.children[0].height / 2) - (particle.y + particle.height)) / 70) + random(1, 2.5);// random(2, 5);
@@ -122,7 +124,7 @@ function generateFallParticles(tree, particle_amount) {
             if ((particle.y + particle.height) > (tree.y + tree.children[0].height / 2)) {
                 particle.destroy();
                 particles = particles.filter(e => e !== particle);
-            } 
+            }
 
 
         });
@@ -201,11 +203,33 @@ function updateMask() {
         nightPlayerCircle.y = playerY;
     }
 
-
-
-
 }
 
+
+function fallOver(time) {
+    fallenOver = true;
+    frame = 0;
+    const FRAME_TIME = 150;
+
+    const reset = function() {
+        fallenOver = false;
+        sprite.texture = IDLE_TEXTURE;
+    }
+
+    const animation = setInterval(() => {
+        if (isGamePaused()) return;
+        if (frame === 3) {
+            clearInterval(animation);
+            setTimeout(() => {
+                reset();
+            }, time * 1000);
+            return;
+        }
+        sprite.texture = ANI_FALL_OVER[frame];
+        frame++;
+    }, FRAME_TIME);
+
+}
 
 
 

@@ -2,44 +2,82 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>HTML 5 Boilerplate</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HTML 5 Boilerplate</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
-  <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
-
-  <link rel="stylesheet" href="./styles/main.css">
-  <link rel="stylesheet" href="./styles/index.css">
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/index.css">
 </head>
 <script>
 
-  window.onload = (event) => {
-    var gameLogoEffect = new Audio('./music/WeepStudiosEffect.mp3');
-    // gameLogoEffect.volume = 0.15;
-
-    var menuMusic = new Audio('./music/menu-music.mp3');
-    menuMusic.loop = true;
-    // menuMusic.volume = 0.25;
-
-    setTimeout(() => {
-      $('.intro').hide();
-      $('.menu').show();
-      menuMusic.play();
-    }, 5 * 1000);
-
-    setTimeout(() => {
-      gameLogoEffect.play();
-    }, 1 * 1000);
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const page = urlParams.get('page')
+    console.log(page);
 
 
-    var slider = document.getElementById("myRange");
-    slider.oninput = function () {
-      menuMusic.volume = this.value;
+    function showLevels() {
+        $('.menu').hide();
+        $('#choose-gamemode').hide();
+        $('.levels').show();
     }
 
-  };
+    window.onload = (event) => {
+
+        var gameLogoEffect = new Audio('./music/WeepStudiosEffect.mp3');
+
+        var menuMusic = new Audio('./music/menu-music.mp3');
+        menuMusic.loop = true;
+
+        if (!page) {
+            $('.intro').show();
+
+            setTimeout(() => {
+                $('.intro').hide();
+                $('.menu').show();
+                menuMusic.play();
+            }, 5 * 1000);
+
+            setTimeout(() => {
+                gameLogoEffect.play();
+            }, 1 * 1000);
+        } else if (page === 'title') {
+            $('.menu').show();
+            menuMusic.play();
+        }
+
+
+        $('#btn-play-game').on('click', function() {
+
+            $('#choose-gamemode').css('display', 'flex');
+            $('#choose-gamemode').addClass('open-gamemode-chooser');
+
+        });
+
+        $('.volume-icon').on('click', function() {
+            if (menuMusic.paused) {
+                menuMusic.play();
+                this.src = './imgs/volume.png';
+            } else {
+                menuMusic.pause();
+                this.src = './imgs/volume_muted.png';
+            }
+        });
+
+
+
+
+
+        var slider = document.getElementById("myRange");
+        slider.oninput = function () {
+            menuMusic.volume = this.value;
+        }
+
+    };
 
 
 
@@ -47,36 +85,82 @@
 </script>
 
 <body>
-  <div class="noselect">
-    <div class="intro">
-      <div class="image">
-        <img class="fade-in" src="./imgs/weep2.png" alt="WEEP Studios">
-      </div>
+    <div class="noselect">
+        <div class="intro">
+            <div class="image">
+                <img class="fade-in" src="./imgs/weep2.png" alt="WEEP Studios">
+            </div>
+        </div>
+        <div class="menu">
+            <div class="snowflakes" aria-hidden="true">
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+                <div class="snowflake"><img src="./sprites/snowflake.png"></div>
+            </div>
+            <div class="buttons">
+                <img src="./imgs/logo.png" alt="Snowshake Park">
+                <br><br><br>
+                <a class="btn-link" id="btn-play-game">Play Game</a>
+                <br><br><br><br>
+                <a class="btn-link">Information</a>
+                <br><br><br><br>
+                <a class="btn-link">Credits</a>
+            </div>
+            <div class="menu-slider-container">
+                <img class="volume-icon" src="./imgs/volume.png">
+                <input type="range" min="0" max="1" value="1" step="0.01" class="slider" id="myRange">
+            </div>
+        </div>
+
+        <div id="choose-gamemode">
+
+            <a class="btn-gamemode">Tutorial</a>
+            <a class="btn-gamemode" onclick="showLevels();">Levels</a>
+            <a class="btn-gamemode">Endless</a>
+
+        </div>
+
+        <div class="levels">
+
+            <table style="border-spacing: 10px;">
+
+                <tr>
+                    <td class="level"> 1 </td>
+                    <td class="level"> 2 </td>
+                    <td class="level"> 3 </td>
+                    <td class="level"> 4 </td>
+                </tr>
+
+                <tr>
+                    <td class="level"> 5 </td>
+                    <td class="level"> 6 </td>
+                    <td class="level"> 7 </td>
+                    <td class="level"> 8 </td>
+                </tr>
+
+            </table>
+
+        </div>
+
     </div>
-    <div class="menu">
-      <div class="snowflakes" aria-hidden="true">
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❅</div>
-      </div>
-      <div class="buttons">
-        <h1>Snowshake Park</h1>
-        <a href="./game.html" class="btn-link">Play game</a>
-      </div>
-      <div class="menu-slider-container">
-        <i class='fas volume-icon'>&#xf028;</i>
-        <input type="range" min="0" max="1" value="1" step="0.01" class="slider" id="myRange">
-      </div>
-    </div>
-  </div>
 </body>
 
 </html>
