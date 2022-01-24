@@ -6,11 +6,18 @@
     height: 100%;
 }
 
+.game-over-screen {
+    display: none;
+    position: absolute;
+    width: 100%;
+    background-color: black;
+    height: 100%;
+}
 
 .pause-icon {
     font-size: 50pt;
     margin: 20px;
-    position: absolute; 
+    position: absolute;
 }
 
 .buttons {
@@ -19,4 +26,18 @@
 
 .img-button-link {
     height: 60px;
+}
+
+.timer {
+    position: absolute;
+    z-index: 10000000;
+    font-size: xxx-large;
+    background: black;
+    top: 0;
+    right: 15px;
+}
+
+#endtimer {
+    margin-top: 50px;
+    color: yellow;
 }

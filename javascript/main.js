@@ -34,8 +34,6 @@ const level = urlParams.get('level');
 
 if (level) loadLevel(level);
 
-
-
 setInterval(updateTrees, 500);
 
 function update() {

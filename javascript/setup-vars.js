@@ -21,6 +21,7 @@ var interactKeys = [];
 
 
 
+
 const SNOWPUFF_TEXTURES = [
     PIXI.Texture.from('sprites/snowpuff1.png'),
     PIXI.Texture.from('sprites/snowpuff2.png'),
@@ -116,8 +117,19 @@ var currentSpeed = baseSpeed;
 
 var currentLevel = {
     walls: [],
-    trees: []
+    trees: [],
+    timer: undefined,
+    timeEnd: undefined,
+    timerSpeed: 0
 };
+
+var levelStats = {
+    treeShakes: 0,
+
+    olofKnocks: 0,
+    olofEscapes: 0,
+    olofFrames: 0
+}
 
 var OLOFSPEED = 10;
 var OLOF_RADIUS = 175;

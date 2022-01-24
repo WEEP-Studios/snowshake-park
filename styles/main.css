@@ -131,6 +131,14 @@ html, body {
     background: url('../imgs/btn/exit_hover.png');
 }
 
+#replay-btn {
+    background: url('../imgs/btn/replay.png');
+}
+
+#replay-btn:hover {
+    background: url('../imgs/btn/replay_hover.png');
+}
+
 #settings-btn {
     background: url('../imgs/btn/settings.png');
 }

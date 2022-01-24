@@ -74,6 +74,7 @@ function interact(key) {
                     generateFallParticles(tree, crown.textureState);
                     crown.texture = CROWN_TEXTURES[crown.textureName]._0;
                     crown.textureState = 0;
+                    levelStats.treeShakes++;
 
 
                     // clearing
@@ -193,7 +194,7 @@ function updateMask() {
     const gr = new PIXI.Graphics();
     gr.beginFill(0x0000ff);
     gr.lineStyle(0);
-    gr.drawCircle(x, y, (nightData?.olofView ? OLOF_RADIUS : nightData?.radius));
+    gr.drawCircle(x, y, (nightData?.olofView ? olof.radius : nightData?.radius));
     gr.endFill();
 
     app.stage.mask = gr;
@@ -211,6 +212,8 @@ function fallOver(time) {
     fallenOver = true;
     frame = 0;
     const FRAME_TIME = 120;
+
+    levelStats.olofKnocks++;
 
     timeouts.skakTimeOut?.cancel(); timeouts.skakTimeOut = undefined;
 

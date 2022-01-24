@@ -1,6 +1,11 @@
 
 
 
+function loadMusic(file) {
+    const sound = PIXI.sound.Sound.from(file);
+    sound.play();
+}
+
 
 
 
@@ -34,7 +39,15 @@ function loadLevel(id) {
         loadNight(level.night);
     }
 
+    if (level.music) loadMusic(level.music);
+
+    
+    setUpTimer(level.time);
+
+
     levelLoaded = true;
+
+
 }
 
 function unLoadLevel() {
@@ -95,15 +108,17 @@ const LEVELS = [
             // { "x1": 100, "y1": 100, "x2": 100 + (10 * WALL_SIZE), "y2": 100 }
         ],
         "treePositions": [
-            // { "x": 500, "y": 500 },
+            { "x": 500, "y": 500 },
             // { "x": 100, "y": 500 },
             // { "x": 800, "y": 500 },
         ],
         "olof": {
             "enabled": true,
             "spawn": { x: 900, y: 200 },
-            "radius": 175,
-            "speed": 5
+            "speed": 5,
+            "roaming": true,
+            "huntRadius": 175,
+            "roamRadius": 100
         },
         "night": {
             "enabled": false,
@@ -111,6 +126,12 @@ const LEVELS = [
             "olofView": false
         },
         "playerSpeed": 4,
+        "time": {
+            "start": new Date('2069-04-20 09:00'),
+            "end": new Date('2069-04-20 15:00'),
+            "realTime": 20,
+        },
+        "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3'
     },
 
 

@@ -11,25 +11,25 @@
   <link rel="stylesheet" href="./styles/index.css">
   <link rel="stylesheet" href="./styles/game.css">
   <script src="./javascript/libs/pixijs-min.js"></script>
+  <script src="./javascript/libs/pixijs-sound-min.js"></script>
   <script src="./javascript/libs/bump-min.js"></script>
 </head>
 
 <body>
 
+  <span class="noselect timer" id="timer">
+  </span>
+  <span class="noselect timer" id="endtimer">
+  </span>
+
 
   <div class="noselect pause-screen">
-
 
     <img class="pause-icon" src="./imgs/pause.png">
 
 
     <div class="buttons">
       <img src="./imgs/pause_text.png" alt="Pause" style="height: 100px;">
-      <!-- <a class="btn-link">Resume</a> 
-      <br><br><br><br>
-      <a class="btn-link">Settings</a>
-      <br><br><br><br> -->
-      <!-- <a class="btn-link" href="./index.html?page=levels">Exit level</a> -->
 
       <br><br>
 
@@ -45,7 +45,21 @@
 
     </div>
 
+  </div>
 
+
+  <div class="noselect game-over-screen">
+
+
+    <div class="buttons">
+
+      <div id="replay-btn" class="img-button-link" onclick="window.location.replace(window.location);"> </div>
+      
+      <br>
+
+      <div id="exit-btn" class="img-button-link" onclick="window.location.replace(`./index.html?page=levels`);"> </div>
+
+    </div>
 
   </div>
 
@@ -53,6 +67,8 @@
 
 
   <script src="./javascript/setup-vars.js"></script>
+  <script src="./javascript/timer.js"></script>
+  <script src="./javascript/game-end.js"></script>
   <script src="./javascript/objects.js"></script>
   <script src="./javascript/snow.js"></script>
   <script src="./javascript/olof.js"></script>
@@ -60,6 +76,7 @@
   <script src="./javascript/movement-interaction.js"></script>
   <script src="./javascript/main.js"></script>
   <script src="./javascript/snow-particles.js"></script>
+  <script src="./javascript/stats.js"></script>
 </body>
 
 </html>

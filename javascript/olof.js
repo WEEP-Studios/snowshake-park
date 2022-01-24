@@ -5,39 +5,39 @@
 function loadOlof(data) {
     olof = new PIXI.Sprite.from('sprites/snowman.png');
 
-    OLOF_RADIUS = data.radius;
-
     OLOFSPEED = data.speed;
+
+    olof.settings = data;
+    olof.radius = data.roaming ? data.roamRadius : data.huntRadius;
 
     olof.x = data.spawn.x;
     olof.y = data.spawn.y
 
-    var gr = new PIXI.Graphics();
-    gr.lineStyle(2.5, 0xFFFFFF, 1);
-
-    const points = calcPointsCirc(0, 0, OLOF_RADIUS, 2);
-
-    for (const point of points) {
-        gr.moveTo(point.x, point.y);
-        gr.lineTo(point.ex, point.ey);
-    }
-
-    var texture = app.renderer.generateTexture(gr);
+    var texture = generateOlofRadiusRing(olof.radius);
     olofCircle = new PIXI.Sprite(texture);
     app.stage.addChild(olofCircle);
 
     olofCircle.anchor.set(0.5);
     olof.anchor.set(0.5);
 
-
-
     olofCircle.x = olof.x;
     olofCircle.y = olof.y;
 
-
-
     app.stage.addChild(olof);
 }
+
+
+function generateOlofRadiusRing(radius) {
+    var gr = new PIXI.Graphics();
+    gr.lineStyle(2.5, 0xFFFFFF, 1);
+    const points = calcPointsCirc(0, 0, radius, 2);
+    for (const point of points) {
+        gr.moveTo(point.x, point.y);
+        gr.lineTo(point.ex, point.ey);
+    }
+    return app.renderer.generateTexture(gr);
+}
+
 
 var olofMoveTimes = 0;
 
@@ -108,9 +108,15 @@ function bounceOlofTo(x, y) {
         if ((directionRight && olof.x > x) || (!directionRight && olof.x < x)) {
             clearInterval(olofBouncer);
             olof.isBounce = false;
+
+            olof.coolDown = true;
+            setTimeout(() => {
+                olof.coolDown = false;
+            }, 1000);
         }
 
         if (b.hit(olof, sprite)) {
+            olofLastSawMe = false;
             moveOlof(random(0, WIDTH), random(0, HEIGHT));
             clearInterval(olofBouncer);
             olof.isBounce = false;
@@ -121,29 +127,77 @@ function bounceOlofTo(x, y) {
 
 }
 
+var olofLastSawMe = false;
+
+var olofWayPoint = {
+    x: undefined,
+    y: undefined
+}
+
+var fps = 0;
+var fpsList = [];
+
+setInterval(() => {
+    if (isGamePaused()) return;
+    fpsList.push(fps);
+    fps = 0;
+}, 1000);
 
 function updateOlof() {
     const x = sprite.x;
     const y = sprite.y;
     const center_x = olofCircle.x;
     const center_y = olofCircle.y;
-    const dx = sprite.x - (olof.x - (olof.width / 2));
-    const dy = sprite.y - (olof.y - (olof.height / 2));
+    const dx = x - (olof.x - (olof.width / 2));
+    const dy = y - (olof.y - (olof.height / 2));
     const angle = Math.atan2(dy, dx)
     const velocityY = Math.sin(angle) * OLOFSPEED;
     const velocityX = Math.cos(angle) * OLOFSPEED;
 
+    fps++;
+
+    
+
     if (doesOlofSeeMe(center_x, center_y, x, y, dx, dy, angle)) {
+        levelStats.olofFrames++;
+        olofLastSawMe = true;
         if (!olof.isBounce) bounceOlofTo(olof.x + (velocityX * 10), (olof.y + velocityY * 10));
+
+        if (olof.radius < olof.settings.huntRadius) olof.radius += 4;
+        olofCircle.texture = generateOlofRadiusRing(olof.radius);
+    } else {
+        if (olofLastSawMe) levelStats.olofEscapes++;
+        olofLastSawMe = false;
+
+        if (olof.radius > olof.settings.roamRadius) olof.radius -= 4;
+        olofCircle.texture = generateOlofRadiusRing(olof.radius);
+
+        if (olof.settings.roaming) {
+
+            if (!olofWayPoint.x || isPointInCircle(olofWayPoint.x, olofWayPoint.y, 250, olof.x, olof.y)) {
+                olofWayPoint.x = random(0, WIDTH);
+                olofWayPoint.y = random(0, HEIGHT);
+            }
+
+            const x = olofWayPoint.x;
+            const y = olofWayPoint.y;
+            const dx = x - (olof.x - (olof.width / 2));
+            const dy = y - (olof.y - (olof.height / 2));
+            const angle = Math.atan2(dy, dx)
+            const velocityY = Math.sin(angle) * OLOFSPEED;
+            const velocityX = Math.cos(angle) * OLOFSPEED;
+
+            if (!olof.isBounce && !olof.coolDown) bounceOlofTo(olof.x + (velocityX * 10), (olof.y + velocityY * 10));
+
+        }
     }
 }
 
 function doesOlofSeeMe(center_x, center_y, x, y, dx, dy, angle) {
-    console.log();
-    if (isPointInCircle(center_x, center_y, OLOF_RADIUS, x, y)
-        || isPointInCircle(center_x, center_y, OLOF_RADIUS, (x + sprite.width), (y + sprite.height))
-        || isPointInCircle(center_x, center_y, OLOF_RADIUS, (x + sprite.width), y)
-        || isPointInCircle(center_x, center_y, OLOF_RADIUS, x, (y + sprite.height))) {
+    if (isPointInCircle(center_x, center_y, olof.radius, x, y)
+        || isPointInCircle(center_x, center_y, olof.radius, (x + sprite.width), (y + sprite.height))
+        || isPointInCircle(center_x, center_y, olof.radius, (x + sprite.width), y)
+        || isPointInCircle(center_x, center_y, olof.radius, x, (y + sprite.height))) {
         const points = [];
         const hyp = Math.sqrt((dx * dx) + (dy * dy));
 
