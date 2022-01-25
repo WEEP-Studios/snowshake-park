@@ -23,12 +23,17 @@
   </span>
 
 
+  <div class="slider-container">
+    <img class="volume-icon" src="./imgs/volume.png">
+    <input type="range" min="0" max="1" value="1" step="0.01" class="slider" id="myRange">
+  </div>
+
   <div class="noselect pause-screen">
 
     <img class="pause-icon" src="./imgs/pause.png">
 
 
-    <div class="buttons">
+    <div class="pause-buttons">
       <img src="./imgs/pause_text.png" alt="Pause" style="height: 100px;">
 
       <br><br>
@@ -37,13 +42,30 @@
 
       <br>
 
-      <div id="settings-btn" class="img-button-link"> </div>
+      <!-- <div id="settings-btn" class="img-button-link"> </div>
 
-      <br>
+      <br> -->
 
       <div id="exit-btn" class="img-button-link" onclick="window.location.replace(`./index.html?page=levels`);"> </div>
 
+      
+
     </div>
+
+  </div>
+
+  <div class="noselect tutorial-pics">
+
+    <img src="./imgs/tutorial/infoImage.png" id="tutorialImage">
+
+    <div id="tutorial-text">
+      <span>The trees will gradually fill up with snow.<br>Shake them [E] before it's too late!</span>
+      <span>Olof the snowman will chase you on sight.<br>Try not to get slowed down!</span>
+    </div>
+
+    <div id="exit-btn" style="position: absolute;top: 600px;right: 0;" class="img-button-link"
+      onclick="window.location.replace(`./index.html?page=title`);"> </div>
+
 
   </div>
 
@@ -51,13 +73,31 @@
   <div class="noselect game-over-screen">
 
 
-    <div class="buttons">
+    <img class="game-state-icon" id="gameOver" src="./imgs/gameover.png">
+    <img class="game-state-icon" id="levelClear" src="./imgs/leverclear.png">
+
+    <div class="star-holder">
+
+      <img class="star" id="star1">
+      <img class="star" id="star2">
+      <img class="star" id="star3">
+
+    </div>
+
+
+
+    <div class="game-end-buttons">
 
       <div id="replay-btn" class="img-button-link" onclick="window.location.replace(window.location);"> </div>
-      
+
       <br>
 
       <div id="exit-btn" class="img-button-link" onclick="window.location.replace(`./index.html?page=levels`);"> </div>
+
+    </div>
+
+    <div class="stats">
+
 
     </div>
 
@@ -68,6 +108,7 @@
 
   <script src="./javascript/setup-vars.js"></script>
   <script src="./javascript/timer.js"></script>
+  <script src="./javascript/tutorial.js"></script>
   <script src="./javascript/game-end.js"></script>
   <script src="./javascript/objects.js"></script>
   <script src="./javascript/snow.js"></script>

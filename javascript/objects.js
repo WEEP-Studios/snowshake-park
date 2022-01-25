@@ -1,6 +1,6 @@
 
 
-function addTrees(treePositions) {
+function addTrees(treePositions, tutorial = false) {
     const trees = [];
 
     for (const treePosition of treePositions) {
@@ -20,9 +20,9 @@ function addTrees(treePositions) {
         stump.anchor.set(0.5);
 
         crown.anchor.set(0.5);
-        crown.texture = CROWN_TEXTURES[crownTexture]._0;
+        crown.texture = CROWN_TEXTURES[crownTexture][`${tutorial ? '_3' : '_0'}`];
         crown.textureName = crownTexture;
-        crown.textureState = 0;
+        crown.textureState = (tutorial ? 3 : 0);
         crown.shaking = false;
         crown.y = -83;
 
@@ -56,7 +56,7 @@ function addWalls(wallPositions) {
     
         for (let i = 0; i < Math.abs(dy) / WALL_SIZE; i++) {
             const wallBlock = PIXI.Sprite.from('sprites/wall_up_down.png');
-            wallBlock.y = i * 32;
+            wallBlock.y = i * WALL_SIZE;
             currentWall.addChild(wallBlock);
         }
 

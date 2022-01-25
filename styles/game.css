@@ -20,9 +20,6 @@
     position: absolute;
 }
 
-.buttons {
-    padding-top: 15%;
-}
 
 .img-button-link {
     height: 60px;
@@ -39,5 +36,65 @@
 
 #endtimer {
     margin-top: 50px;
-    color: yellow;
+    color: white;
+    font-style: italic;
+}
+
+
+.game-end-buttons {
+    padding-top: 400px;
+    text-align: center;
+}
+
+.stats-table {
+    padding-top: 20px;
+    left: calc((100% - 300px) / 2);
+    position: absolute;
+    width: 300px;
+    font-size: 1.2em;
+}
+
+.star-holder {
+    padding-top: 250px;
+    left: calc((100% - (92px * 3 + 4px)) / 2);
+    position: absolute;
+}
+
+.star {
+    width: 92px;
+}
+
+.game-state-icon {
+    position: absolute;
+    width: 300px;
+    left: calc(50% - 150px);
+    display: none;
+}
+
+.tutorial-pics {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    overflow: hidden;
+
+    display: none;
+}
+
+#tutorial-text {
+    text-align: center;
+    font-size: 1.8em;
+    display: flex;
+    justify-content: space-evenly;
+
+    width: 100%;
+
+    top: 400px;
+    z-index: 1000;
+    position: absolute;
+}
+
+
+.pause-buttons {
+    padding-top: 150px;
+    text-align: center;
 }

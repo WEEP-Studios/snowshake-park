@@ -34,7 +34,7 @@ const level = urlParams.get('level');
 
 if (level) loadLevel(level);
 
-setInterval(updateTrees, 500);
+// setInterval(updateTrees, 200);
 
 function update() {
     if (isGamePaused()) return;
@@ -49,9 +49,11 @@ function pauseGame() {
     gamePaused = true;
     Object.values(timeouts).forEach(timeout => timeout?.pause());
     $('.pause-screen').show();
+    $('.slider-container').show();
 }
 
 function resumeGame() {
+    $('.slider-container').hide();
     $('.pause-screen').hide();
     gamePaused = false;
     Object.values(timeouts).forEach(timeout => timeout?.resume());

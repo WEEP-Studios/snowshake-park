@@ -2,8 +2,27 @@
 
 
 function loadMusic(file) {
+
+    console.log('aaaaaaaa')
+
     const sound = PIXI.sound.Sound.from(file);
     sound.play();
+
+    var slider = document.getElementById("myRange");
+    slider.oninput = function () {
+        sound.volume = this.value;
+    }
+
+    $('.volume-icon').on('click', function () {
+        console.log(!sound.isPlaying)
+        if (!sound.isPlaying) {
+            sound.resume();
+            this.src = './imgs/volume.png';
+        } else {
+            sound.pause();
+            this.src = './imgs/volume_muted.png';
+        }
+    });
 }
 
 
@@ -17,6 +36,9 @@ function loadLevel(id) {
 
     if (!level) {
         console.error(`Level "${id}" does not exist!`);
+        return;
+    } else if (level.tutorial) {
+        startTutorial(level);
         return;
     }
 
@@ -33,7 +55,10 @@ function loadLevel(id) {
     currentLevel.trees = trees;
     currentLevel.walls = walls;
 
+    currentLevel.levelData = level;
+
     baseSpeed = level.playerSpeed || DEFAULT_baseSpeed;
+
 
     if (level.night?.enabled) {
         loadNight(level.night);
@@ -41,7 +66,7 @@ function loadLevel(id) {
 
     if (level.music) loadMusic(level.music);
 
-    
+
     setUpTimer(level.time);
 
 
@@ -108,17 +133,21 @@ const LEVELS = [
             // { "x1": 100, "y1": 100, "x2": 100 + (10 * WALL_SIZE), "y2": 100 }
         ],
         "treePositions": [
-            { "x": 500, "y": 500 },
+            // { "x": 500, "y": 500 },
             // { "x": 100, "y": 500 },
             // { "x": 800, "y": 500 },
         ],
         "olof": {
             "enabled": true,
-            "spawn": { x: 900, y: 200 },
+            "spawns": [
+                { x: 250, y: 200 },
+                { x: 250, y: 200 },
+                { x: 250, y: 200 }
+            ],
             "speed": 5,
-            "roaming": true,
+            "roaming": false,
             "huntRadius": 175,
-            "roamRadius": 100
+            "roamRadius": 200
         },
         "night": {
             "enabled": false,
@@ -129,42 +158,19 @@ const LEVELS = [
         "time": {
             "start": new Date('2069-04-20 09:00'),
             "end": new Date('2069-04-20 15:00'),
-            "realTime": 20,
+            "realTime": 3,
         },
-        "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3'
-    },
-
-
-
-    {
-        "id": "level_1",
-        "title": "level 2 (test)",
-        "wallPositions": [],
-        "treePositions": [
-            { "x": 592, "y": 323 },
-            { "x": 798, "y": 598 },
-            { "x": 1003, "y": 283 },
-        ],
-        "playerSpeed": 4,
+        "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
+        "pointCap": 15000,
     },
 
     {
-        "id": "level_2",
-        "title": "level 2 (test)",
-        "wallPositions": [],
-        "treePositions": [
-            { "x": 328, "y": 420 },
-            { "x": 255, "y": 319 },
-        ],
-        "olof": {
-            "enabled": true,
-            "spawn": { x: 900, y: 200 },
-            "radius": 250,
-            "speed": 5
-        },
+        "tutorial": true,
+        "id": "tutorial",
+        "title": "Tutorial",
         "playerSpeed": 4,
-    }
-
+        "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
+    },
 
 
 ]

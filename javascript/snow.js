@@ -6,8 +6,11 @@ function updateTrees() {
 
     if (isGamePaused()) return;
 
+    if (getSurvivingTrees() === 0) gameOver(false); 
+
     for (const tree of currentLevel.trees) {
         const crown = tree.children[1];
+        console.log(!crown.shaking, !tree.dead)
         if (random(0, 15) > 12 && !crown.shaking && !tree.dead) {
             const textureState = crown.textureState;
             if (textureState === TREE_DEAD_STATE) {

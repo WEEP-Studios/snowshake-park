@@ -178,7 +178,26 @@ html, body {
     height: 57px;
 }
 
+.open-gamemode-chooser {
+    animation: open-gamemode-chooser 0.2s linear;
+}
 
+@keyframes open-gamemode-chooser {
+    0% {
+        /* margin-left: calc(50% + 25%);
+        margin-top: calc(50% + 5%); */
+        width: 0%;
+        height: 0%;
+    }
+
+    50% {
+        height: 10%;
+    }
+
+    100% {
+        width: 50%;
+    }
+}
 
 
 

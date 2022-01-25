@@ -94,7 +94,7 @@ const PARTICLE_LOWER_LIMIT_X = -2;
 // const PARTICLE_MAX_SIZE = 12;
 // const PARTICLE_MIN_SIZE = 7;
 const VALID_PARTICLE_SIZES = [15, 20, 25];
-var PARTICLE_AMOUNT = 100;
+var PARTICLE_AMOUNT = 0;
 const PARTICLE_COLOR = 0xffffff;
 
 const MOVEMENT_KEYS = ['arrowleft', 'arrowright', 'arrowdown', 'arrowup', 'w', 'a', 's', 'd'];
@@ -120,7 +120,8 @@ var currentLevel = {
     trees: [],
     timer: undefined,
     timeEnd: undefined,
-    timerSpeed: 0
+    timerSpeed: 0,
+    levelData: undefined,
 };
 
 var levelStats = {
@@ -140,6 +141,7 @@ var olofCircle, nightPlayerCircle;
 
 var fallenOver;
 
+var tutorial = false;
 
 
 // ! LEVEL BASED VARS

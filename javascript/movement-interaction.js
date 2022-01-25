@@ -37,6 +37,8 @@ function updateMovementInteraction() {
         timeouts.skakTimeOut?.cancel();
         timeouts.skakTimeOut = undefined;
     }
+
+    if (interactKeys.length === 0) currentLevel.trees.forEach(tree => tree.children[1].shaking = false);
 }
 
 
@@ -75,6 +77,8 @@ function interact(key) {
                     crown.texture = CROWN_TEXTURES[crown.textureName]._0;
                     crown.textureState = 0;
                     levelStats.treeShakes++;
+
+                    if (tutorial) spawnPart2();
 
 
                     // clearing
@@ -218,6 +222,7 @@ function fallOver(time) {
     timeouts.skakTimeOut?.cancel(); timeouts.skakTimeOut = undefined;
 
     const reset = function() {
+        if (tutorial) movePlayerToTree();
         fallenOver = false;
         sprite.texture = IDLE_TEXTURE;
     }

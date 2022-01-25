@@ -10,8 +10,6 @@ function loadOlof(data) {
     olof.settings = data;
     olof.radius = data.roaming ? data.roamRadius : data.huntRadius;
 
-    olof.x = data.spawn.x;
-    olof.y = data.spawn.y
 
     var texture = generateOlofRadiusRing(olof.radius);
     olofCircle = new PIXI.Sprite(texture);
@@ -24,6 +22,8 @@ function loadOlof(data) {
     olofCircle.y = olof.y;
 
     app.stage.addChild(olof);
+
+    respawnOlof();
 }
 
 
@@ -53,12 +53,12 @@ function moveOlof(x, y) {
     olofCircle.x = x;
     olofCircle.y = y;
 
-    if (olofMoveTimes % 4 === 0) {
-        let test = new PIXI.Sprite.from('sprites/error.png');
-        test.x = olof.x;
-        test.y = olof.y;
-        app.stage.addChild(test);
-    }
+    // if (olofMoveTimes % 4 === 0) {
+    //     let test = new PIXI.Sprite.from('sprites/error.png');
+    //     test.x = olof.x;
+    //     test.y = olof.y;
+    //     app.stage.addChild(test);
+    // }
 
     updateMask();
     olofMoveTimes++;
@@ -117,7 +117,8 @@ function bounceOlofTo(x, y) {
 
         if (b.hit(olof, sprite)) {
             olofLastSawMe = false;
-            moveOlof(random(0, WIDTH), random(0, HEIGHT));
+            // moveOlof(olof.settings.spawn.x, olof.settings.spawn.y);
+            respawnOlof();
             clearInterval(olofBouncer);
             olof.isBounce = false;
             fallOver(2);
@@ -126,6 +127,24 @@ function bounceOlofTo(x, y) {
     }, 8);
 
 }
+
+function respawnOlof() {
+    let closestDist = 10000000000;
+    let bestI;
+    console.log(olof.settings)
+    for (let i = 0; i < olof.settings.spawns.length; i++) {
+        const olofSpawnPos = olof.settings.spawns[i];
+        const dx = sprite.x - olofSpawnPos.x;
+        const dy = sprite.y - olofSpawnPos.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance < closestDist) {
+            bestI = i;
+            closestDist = distance;
+        }
+    }
+    moveOlof(olof.settings.spawns[bestI].x, olof.settings.spawns[bestI].y)
+}
+
 
 var olofLastSawMe = false;
 
@@ -158,7 +177,7 @@ function updateOlof() {
 
     
 
-    if (doesOlofSeeMe(center_x, center_y, x, y, dx, dy, angle)) {
+    if (doesOlofSeeMe(center_x, center_y, x, y, dx, dy, angle) && !fallenOver) {
         levelStats.olofFrames++;
         olofLastSawMe = true;
         if (!olof.isBounce) bounceOlofTo(olof.x + (velocityX * 10), (olof.y + velocityY * 10));

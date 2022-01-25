@@ -58,6 +58,13 @@
         './imgs/volume.png'
     )
 
+    function showInfo() {
+        $('.menu').hide();
+        $('#choose-gamemode').hide();
+        $('.cred').show();
+        $('.slider-container').show();
+    }
+
 
     function showLevels() {
         $('.menu').hide();
@@ -69,6 +76,7 @@
     function showMenu() {
         $('.levels').hide();
         $('#choose-gamemode').hide();
+        $('.cred').hide();
         $('.slider-container').show();
         $('.menu').show();
     }
@@ -187,7 +195,7 @@
 
                 <div id="start-btn" class="img-button-link" style="transform: scale(1.5);"> </div>
                 <br>
-                <div id="info-btn" class="img-button-link" style="transform: scale(1.5);"> </div>
+                <div id="info-btn" class="img-button-link" style="transform: scale(1.5);" onclick="showInfo();"> </div>
             </div>
         </div>
 
@@ -199,7 +207,7 @@
             <a class="btn-gamemode" onclick="showLevels();">Levels</a>
             <a class="btn-gamemode">Endless</a> -->
 
-            <div id="tutorial-btn" class="start-option img-button-link"> </div>
+            <div id="tutorial-btn" class="start-option img-button-link" onclick="window.location.replace(`./game.html?level=tutorial`);"> </div>
             <div id="levels-btn" class="start-option img-button-link" onclick="showLevels();"> </div>
             <div id="endless-btn" class="start-option img-button-link"> </div>
 
@@ -215,6 +223,18 @@
                 </tr>
 
             </table>
+
+            <div id="level-go-back-btn" class="img-button-link" onclick="showMenu();"> </div>
+
+
+        </div>
+
+
+        <div class="cred">
+
+            <h1> Backstory: </h1>
+            <h2>It is a hot summer day, the local authority has decided <br> to add some new nice trees to their new park: Snowshake Park</h2>
+            <h2>Suddenly a snowstorm comes in over the city and the authoritys <br> hire you to shake down the snow from the trees! Good Luck!</h2>
 
             <div id="level-go-back-btn" class="img-button-link" onclick="showMenu();"> </div>
 
