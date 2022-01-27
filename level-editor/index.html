@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level editor</title>
+
+    <style>
+        * {
+            image-rendering: pixelated;
+        }
+        textarea {
+            margin-top: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <br>
+    <label for="objects">Select object to place: </label>
+    <select name="objects" id="objects">
+        <option value="vwall">Vertical wall</option>
+        <option value="hwall">Horizontal wall</option>
+        <option value="tree">Tree</option>
+        <option value="pspawn">Player spawn</option>
+        <option value="ospawn">Olof spawn</option>
+    </select>
+
+    <button onclick="document.getElementById('output').value = JSON.stringify(exportGrid(), null, 2)" >Export to JSON</button>
+
+    <br>
+
+    <textarea id="output" cols="30" rows="10"></textarea>
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        JSON.stringify({}, )
+        const OBJECTS = [
+            {
+                id: 'vwall',
+                img: 'wall_up_down',
+                width: 48,
+                height: 48,
+                dx: 0,
+                dy: 0
+            },
+            {
+                id: 'hwall',
+                img: 'wall_left_right',
+                width: 48,
+                height: 48,
+                dx: 0,
+                dy: 0
+            },
+            {
+                id: 'tree',
+                img: 'tree',
+                width: 144,
+                height: 168,
+                dx: 0,
+                dy: -72
+            },
+            {
+                id: 'pspawn',
+                img: 'char1',
+                width: 48,
+                height: 48,
+                dx: 0,
+                dy: 0
+            },
+            {
+                id: 'ospawn',
+                img: 'snowman',
+                width: 48,
+                height: 48,
+                dx: 0,
+                dy: 0
+            }
+        ]
+        const IMAGES = [];
+        for (obj of OBJECTS) {
+            const img = new Image(obj.width, obj.height);
+            img.src = obj.img + '.png';
+            IMAGES.push({
+                img: img,
+                id: obj.id
+            });
+        }
+
+        var grid = [];
+        var selectedObj = OBJECTS[0];
+
+        var mouseGridX;
+        var mouseGridY;
+
+        const WIDTH = 27;
+        const HEIGHT = 15;
+        const TILESIZE = 48;
+        const OFFSETX = 8;
+
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = WIDTH * TILESIZE;
+        canvas.height = HEIGHT * TILESIZE;
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        document.onmousemove = function (event) {
+            let x = event.pageX;
+            let y = event.pageY;
+
+            if (isWithinGrid(x, y)) {
+                redraw();
+
+                let gridX = Math.round(x / TILESIZE) - 1;
+                let gridY = Math.round(y / TILESIZE) - 1;
+
+                mouseGridX = gridX;
+                mouseGridY = gridY;
+
+                ctx.globalAlpha = 0.5;
+                drawObj(selectedObj.id, selectedObj.dx, selectedObj.dy, gridX, gridY, selectedObj.width, selectedObj.height);
+            }
+        }
+
+        document.onclick = function (event) {
+            let x = event.pageX;
+            let y = event.pageY;
+
+            if (isWithinGrid(x, y) && event.target.id == 'canvas') {
+                let gridX = Math.round(x / TILESIZE) - 1;
+                let gridY = Math.round(y / TILESIZE) - 1;
+                const newobj = JSON.parse(JSON.stringify(selectedObj));
+                newobj.x = gridX;
+                newobj.y = gridY;
+
+                if (newobj.id === 'pspawn' && grid.find(o => o.id === 'pspawn')) grid.splice(grid.indexOf(grid.find(o => o.id === 'pspawn')), 1);
+
+                grid.push(newobj);
+
+                grid = grid.sort();
+
+                redraw();
+            }
+        }
+
+        document.getElementById('objects').onchange = function () {
+            let newname = document.getElementById('objects').value;
+
+            selectedObj = OBJECTS.find(o => o.id == newname);
+        }
+
+        document.onkeypress = function (event) {
+            if (event.key.toLowerCase() == 'e') {
+                for (const o of grid) {
+                    if (mouseGridX === o.x && mouseGridY == o.y) {
+                        grid.splice(grid.indexOf(o), 1);
+                        redraw();
+                        break;
+                    }
+                }
+            }
+        }
+
+        function isWithinGrid(x, y) {
+            return x <= WIDTH * TILESIZE && y <= HEIGHT * TILESIZE;
+        }
+
+        function getImage(id) {
+            return IMAGES.find(i => i.id == id).img;
+        }
+
+        function redraw() {
+            ctx.globalAlpha = 1;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (const obj of grid) {
+                drawObj(obj.id, obj.dx, obj.dy, obj.x, obj.y, obj.width, obj.height);
+            }
+        }
+
+        function drawObj(id, dx, dy, x, y, width, height) {
+            ctx.drawImage(getImage(id), x * TILESIZE + dx, y * TILESIZE + dy, width, height);
+        }
+
+        function exportGrid() {
+            if (grid.find(x => x.id == 'pspawn') == undefined) {
+                alert('Please add a player spawnpoint!');
+                return;
+            }
+            if (grid.find(x => x.id == 'tree') == undefined) {
+                alert('This level doesn\'t contain any trees. You\'ll lose immediately.');
+            }
+
+            const wallConnections = [];
+            const walls = [];
+            const trees = [];
+            const olofSpawns = [];
+
+            for (const obj of grid) {
+                if (obj.id === 'hwall' && wallConnections.find(w => w.includes(obj)) == undefined) {
+                    const sameY = grid.filter(w => w.y == obj.y && w.id == obj.id);
+                    let connection = [];
+                    for (let i = 0; i < WIDTH; i++) {
+                        const wall = sameY.find(w => w.x === i);
+                        if (wall == undefined) {
+                            if (connection.length > 0) wallConnections.push(connection);
+                            connection = [];
+                        }
+                        else {
+                            connection.push(wall);
+                        }
+                    }
+                }
+                else if (obj.id === 'vwall' && wallConnections.find(w => w.includes(obj)) == undefined) {
+                    const sameX = grid.filter(w => w.x == obj.x && w.id == obj.id);
+                    let connection = [];
+                    for (let i = 0; i < HEIGHT; i++) {
+                        const wall = sameX.find(w => w.y === i);
+                        if (wall == undefined) {
+                            if (connection.length > 0) wallConnections.push(connection);
+                            connection = [];
+                        }
+                        else {
+                            connection.push(wall);
+                        }
+                    }
+                }
+                else if (obj.id === 'tree') trees.push({
+                    x: (obj.x + 1) * TILESIZE + OFFSETX + 27,
+                    y: (obj.y + 1) * TILESIZE + 35
+                });
+                else if (obj.id === 'ospawn') olofSpawns.push({
+                    x: obj.x * TILESIZE + OFFSETX,
+                    y: obj.y * TILESIZE
+                });
+            }
+
+            for (const connection of wallConnections) {
+                walls.push({
+                    x: connection[0].x * TILESIZE + OFFSETX,
+                    y: connection[0].y * TILESIZE + OFFSETX,
+                    dx: connection[0].id === 'hwall' ? connection.length * TILESIZE : 0,
+                    dy: connection[0].id === 'vwall' ? connection.length * TILESIZE : 0
+                });
+            }
+
+            return {
+                id: 'exported_level',
+                title: 'Exported Level',
+                wallPositions: walls,
+                treePositions: trees,
+                olof: {
+                    enabled: olofSpawns.length > 0,
+                    spawns: olofSpawns,
+                    speed: 5,
+                    roaming: true,
+                    huntRadius: 175,
+                    roamRadius: 100
+                },
+                night: {
+                    enabled: false,
+                    radius: 200,
+                    olofView: false
+                },
+                player: {
+                    speed: 4,
+                    spawn: {
+                        x: grid.find(x => x.id == 'pspawn').x * TILESIZE + OFFSETX,
+                        y: grid.find(x => x.id == 'pspawn').y * TILESIZE
+                    }
+                },
+                snowTimer: 1500,
+                snowParticleAmount: 150,
+                time: {
+                    start: '2069-04-20 09:00',
+                    end: '2069-04-20 15:00',
+                    realTime: 180,
+                },
+                music: 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
+                pointCap: 150000000
+            };
+        }
+    </script>
+</body>
+
+</html>
