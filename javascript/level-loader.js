@@ -1,11 +1,9 @@
 
-
+let sound;
 
 function loadMusic(file) {
 
-    console.log('aaaaaaaa')
-
-    const sound = PIXI.sound.Sound.from(file);
+    sound = PIXI.sound.Sound.from(file);
     sound.play();
 
     var slider = document.getElementById("myRange");
@@ -57,8 +55,13 @@ function loadLevel(id) {
 
     currentLevel.levelData = level;
 
-    baseSpeed = level.playerSpeed || DEFAULT_baseSpeed;
+    baseSpeed = level.player.speed || DEFAULT_baseSpeed;
 
+    sprite.x = level.player.spawn.x;
+    sprite.y = level.player.spawn.y;
+
+    addSnowParticles(level.snowParticleAmount);
+    setInterval(updateTrees, level.snowTimer);
 
     if (level.night?.enabled) {
         loadNight(level.night);
@@ -145,9 +148,9 @@ const LEVELS = [
                 { x: 250, y: 200 }
             ],
             "speed": 5,
-            "roaming": false,
+            "roaming": true,
             "huntRadius": 175,
-            "roamRadius": 200
+            "roamRadius": 100
         },
         "night": {
             "enabled": false,
@@ -161,7 +164,7 @@ const LEVELS = [
             "realTime": 3,
         },
         "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
-        "pointCap": 15000,
+        "pointCap": 1500000000000,
     },
 
     {
@@ -171,6 +174,52 @@ const LEVELS = [
         "playerSpeed": 4,
         "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
     },
+
+    {
+        "id": "level_1",
+        "title": "Level 1",
+        "wallPositions": [
+            {x: 250, y: 150, dx: 0, dy: 7 * WALL_SIZE},
+            {x: 250 + WALL_SIZE, y: 150 + 3 * WALL_SIZE, dx: 13 * WALL_SIZE, dy: 0},
+            {x: 250 + 14 * WALL_SIZE, y: 150, dx: 0, dy: 7 * WALL_SIZE},
+            {x: 250 + 4 * WALL_SIZE, y: 150 + 4 * WALL_SIZE, dx: 0, dy: 3 * WALL_SIZE}
+        ],
+        "treePositions": [
+            { "x": 500, "y": 600 },
+            // { "x": 100, "y": 500 },
+            // { "x": 800, "y": 500 },
+        ],
+        "olof": {
+            "enabled": true,
+            "spawns": [
+                { x: 250, y: 200 },
+                { x: 250, y: 200 },
+                { x: 250, y: 200 }
+            ],
+            "speed": 5,
+            "roaming": true,
+            "huntRadius": 175,
+            "roamRadius": 100
+        },
+        "night": {
+            "enabled": false,
+            "radius": 200,
+            "olofView": false
+        },
+        "player": {
+            "speed": 4,
+            "spawn": {x: 1000, y: 500}
+        },
+        "snowTimer": 1500,
+        "snowParticleAmount": 150,
+        "time": {
+            "start": new Date('2069-04-20 09:00'),
+            "end": new Date('2069-04-20 15:00'),
+            "realTime": 180,
+        },
+        "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
+        "pointCap": 150000000,
+    }
 
 
 ]

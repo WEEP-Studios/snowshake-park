@@ -49,10 +49,10 @@ function addWalls(wallPositions) {
 
     for (const wallPosition of wallPositions) {
         const currentWall = new PIXI.Container();
-        currentWall.x = wallPosition.x1;
-        currentWall.y = wallPosition.y1;
-        const dy = wallPosition.y2 - wallPosition.y1;
-        const dx = wallPosition.x2 - wallPosition.x1;
+        currentWall.x = wallPosition.x;
+        currentWall.y = wallPosition.y;
+        const dy = wallPosition.dy;
+        const dx = wallPosition.dx;
     
         for (let i = 0; i < Math.abs(dy) / WALL_SIZE; i++) {
             const wallBlock = PIXI.Sprite.from('sprites/wall_up_down.png');

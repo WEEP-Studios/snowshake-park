@@ -27,12 +27,13 @@ function spawnPart2() {
 
         const wallEndX = wallStartX + 4 * WALL_SIZE;
         const wallEndY = wallStartY + 4 * WALL_SIZE;
+        const wallLength = 4 * WALL_SIZE;
 
         const walls = addWalls([
-            {x1: wallStartX, y1: wallEndY, x2: wallEndX, y2: wallEndY},
-            {x1: wallStartX, y1: wallStartY, x2: wallStartX, y2: wallEndY},
-            {x1: wallEndX, y1: wallStartY, x2: wallEndX, y2: wallEndY + WALL_SIZE}
-        ])
+            {x: wallStartX, y: wallEndY, dx: wallLength, dy: 0},
+            {x: wallStartX, y: wallStartY, dx: 0, dy: wallLength},
+            {x: wallEndX, y: wallStartY, dx: 0, dy: wallLength + WALL_SIZE}
+        ]);
 
         currentLevel.walls = walls;
         

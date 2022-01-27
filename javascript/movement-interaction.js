@@ -211,7 +211,7 @@ function updateMask() {
 }
 
 
-function fallOver(time) {
+function fallOver(time, touch) {
     sprite.stop();
     fallenOver = true;
     frame = 0;
@@ -221,7 +221,19 @@ function fallOver(time) {
 
     timeouts.skakTimeOut?.cancel(); timeouts.skakTimeOut = undefined;
 
-    const reset = function() {
+    if (random(0, 69) < 20) {
+        setTimeout(() => {
+            PIXI.sound.Sound.from({
+                url: `music/scream.mp3`,
+                autoPlay: true,
+                volume: 0.2,
+            });
+        }, 200);
+    }
+
+
+
+    const reset = function () {
         if (tutorial) movePlayerToTree();
         fallenOver = false;
         sprite.texture = IDLE_TEXTURE;
@@ -237,7 +249,7 @@ function fallOver(time) {
             }, time * 1000)
             return;
         }
-        sprite.texture = ANI_FALL_OVER[frame];
+        sprite.texture = ANI_FALL_OVER[touch][frame];
         frame++;
     }, FRAME_TIME);
 
@@ -262,6 +274,7 @@ function getTouchSide(r1, r2) {
     vy = (r1.gy + Math.abs(r1.halfHeight) - r1.yAnchorOffset) - (r2.gy + Math.abs(r2.halfHeight) - r2.yAnchorOffset);
     combinedHalfWidths = Math.abs(r1.halfWidth) + Math.abs(r2.halfWidth);
     combinedHalfHeights = Math.abs(r1.halfHeight) + Math.abs(r2.halfHeight);
+    console.log(r1, r2);
     if (Math.abs(vx) < combinedHalfWidths) {
         if (Math.abs(vy) < combinedHalfHeights) {
             overlapX = combinedHalfWidths - Math.abs(vx);
@@ -282,4 +295,10 @@ function getTouchSide(r1, r2) {
         }
     }
     return collision;
+}
+
+function getLeftRight() {
+    if (sprite.x > olof.x) {
+        return 'right'
+    } else return 'left'
 }

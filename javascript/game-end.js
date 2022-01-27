@@ -60,7 +60,6 @@ function gameOver(success) {
 
 
 
-    $(`#${success ? 'levelClear' : 'gameOver'}`).show();
 
     $('.slider-container').show();
 
@@ -78,14 +77,34 @@ function gameOver(success) {
     pointSum += aliveTrees * 10000;
     pointSum += (aliveTrees === totaltrees ? 10000 : 0);
     pointSum += levelStats.treeShakes * 600;
-    pointSum += levelStats.olofEscapes * 1500;
+    pointSum -= levelStats.olofEscapes * 1500;
     pointSum -= levelStats.olofKnocks * 2000;
 
     pointSum = (pointSum < 0 ? 0 : pointSum);
 
-    $('#star1').attr('src', `./imgs/star_small${(levelData.pointCap * 0.2) <= pointSum ? '1' : '0'}.png`); // 20%
-    $('#star2').attr('src', `./imgs/star_big${(levelData.pointCap * 0.5) <= pointSum ? '1' : '0'}.png`); // 50%
-    $('#star3').attr('src', `./imgs/star_small${levelData.pointCap <= pointSum ? '1' : '0'}.png`); // 100%
+    if ((levelData.pointCap * 0.2) > pointSum) success = false;
+
+
+    $(`#${success ? 'levelClear' : 'gameOver'}`).show();
+
+    $('#star1').attr('src', `./imgs/star_small${(levelData.pointCap * 0.2) <= pointSum && success ? '1' : '0'}.png`); // 20%
+    $('#star2').attr('src', `./imgs/star_big${(levelData.pointCap * 0.5) <= pointSum && success ? '1' : '0'}.png`); // 50%
+    $('#star3').attr('src', `./imgs/star_small${levelData.pointCap <= pointSum && success ? '1' : '0'}.png`); // 100%
+
+
+    sound.pause();
+
+    setTimeout(() => {
+        PIXI.sound.Sound.from({
+            url: `music/${success ? 'VictoryEffectAlt1' : 'DefeatAlt1'}.mp3`,
+            autoPlay: true,
+            complete: function() {
+                sound.resume();
+            }
+        });
+    }, 200);
+
+    
 
 
 }

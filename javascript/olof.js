@@ -118,10 +118,11 @@ function bounceOlofTo(x, y) {
         if (b.hit(olof, sprite)) {
             olofLastSawMe = false;
             // moveOlof(olof.settings.spawn.x, olof.settings.spawn.y);
+            const side = getLeftRight();
             respawnOlof();
             clearInterval(olofBouncer);
             olof.isBounce = false;
-            fallOver(2);
+            fallOver(2, side);
         }
 
     }, 8);

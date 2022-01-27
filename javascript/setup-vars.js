@@ -60,11 +60,18 @@ const ANI_SHAKE_RIGHT = [
     PIXI.Texture.from('sprites/char_shake3_mirror.png'),
     PIXI.Texture.from('sprites/char_shake2_mirror.png')
 ];
-const ANI_FALL_OVER = [
-    PIXI.Texture.from('sprites/char_dmg1.png'),
-    PIXI.Texture.from('sprites/char_dmg2.png'),
-    PIXI.Texture.from('sprites/char_dmg3.png')
-];
+const ANI_FALL_OVER = {
+    left: [
+        PIXI.Texture.from('sprites/char_dmg1.png'),
+        PIXI.Texture.from('sprites/char_dmg2.png'),
+        PIXI.Texture.from('sprites/char_dmg3.png')
+    ],
+    right: [
+        PIXI.Texture.from('sprites/char_dmg1_mirror.png'),
+        PIXI.Texture.from('sprites/char_dmg2_mirror.png'),
+        PIXI.Texture.from('sprites/char_dmg3_mirror.png')
+    ]
+};
 
 
 const CROWN_TEXTURES = {
@@ -179,7 +186,7 @@ var Timer = function (callback, delay) {
         remaining -= Date.now() - start;
     };
 
-    this.cancel = function() {
+    this.cancel = function () {
         window.clearTimeout(timerId);
     }
 
