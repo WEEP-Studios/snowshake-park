@@ -11,12 +11,12 @@ function tick() {
 }
 
 function setUpTimer(time) {
-    currentLevel.timer = time.start;
-    currentLevel.timeEnd = time.end;
+    currentLevel.timer = new Date(time.start);
+    currentLevel.timeEnd = new Date(time.end);
 
-    showTimeText(currentLevel.timer.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), time.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    showTimeText(currentLevel.timer.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), currentLevel.timeEnd.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
 
-    currentLevel.timerSpeed = ((diff_hours(time.start, time.end)) * 30) / time.realTime;
+    currentLevel.timerSpeed = ((diff_hours(currentLevel.timer, currentLevel.timeEnd)) * 30) / time.realTime;
     setInterval(tick, 500);
 }
 

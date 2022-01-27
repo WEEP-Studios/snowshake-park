@@ -159,8 +159,8 @@ const LEVELS = [
         },
         "playerSpeed": 4,
         "time": {
-            "start": new Date('2069-04-20 09:00'),
-            "end": new Date('2069-04-20 15:00'),
+            "start": '2069-04-20 09:00',
+            "end": '2069-04-20 15:00',
             "realTime": 3,
         },
         "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
@@ -213,13 +213,56 @@ const LEVELS = [
         "snowTimer": 1500,
         "snowParticleAmount": 150,
         "time": {
-            "start": new Date('2069-04-20 09:00'),
-            "end": new Date('2069-04-20 15:00'),
+            "start": '2069-04-20 09:00',
+            "end": '2069-04-20 15:00',
             "realTime": 180,
         },
         "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
         "pointCap": 150000000,
-    }
+    },
+
+    {
+        "id": "exported_level",
+        "title": "Exported Level",
+        "wallPositions": [
+          {
+            "x": 8,
+            "y": 8,
+            "dx": 0,
+            "dy": 48
+          }
+        ],
+        "treePositions": [],
+        "olof": {
+          "enabled": false,
+          "spawns": [],
+          "speed": 5,
+          "roaming": true,
+          "huntRadius": 175,
+          "roamRadius": 100
+        },
+        "night": {
+          "enabled": false,
+          "radius": 200,
+          "olofView": false
+        },
+        "player": {
+          "speed": 4,
+          "spawn": {
+            "x": 440,
+            "y": 248
+          }
+        },
+        "snowTimer": 1500,
+        "snowParticleAmount": 150,
+        "time": {
+          "start": "2069-04-20T07:00:00.000Z",
+          "end": "2069-04-20T13:00:00.000Z",
+          "realTime": 180
+        },
+        "music": "music/gtkiajnieoifawhniotftganwiofranfoia.mp3",
+        "pointCap": 150000000
+      }
 
 
 ]
