@@ -76,13 +76,13 @@ function startTutorial(level) {
     spawnEButton(180, 80);
 
     tutorial = true;
-    console.log("Tutorial!");
 
     baseSpeed = level.playerSpeed || DEFAULT_baseSpeed;
 
 
 
     tutTree = addTrees([{ "x": 100, "y": 200 }], true)
+    console.log(tutTree);
     app.stage.addChild(tutTree[0]);
     currentLevel.trees = tutTree;
 

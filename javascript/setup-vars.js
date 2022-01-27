@@ -1,5 +1,5 @@
 
-const WIDTH = 1280;
+const WIDTH = 1296;
 const HEIGHT = 720;
 
 var timeouts = {

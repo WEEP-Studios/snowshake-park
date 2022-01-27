@@ -3,24 +3,24 @@ let sound;
 
 function loadMusic(file) {
 
-    sound = PIXI.sound.Sound.from(file);
-    sound.play();
+  sound = PIXI.sound.Sound.from(file);
+  sound.play();
 
-    var slider = document.getElementById("myRange");
-    slider.oninput = function () {
-        sound.volume = this.value;
+  var slider = document.getElementById("myRange");
+  slider.oninput = function () {
+    sound.volume = this.value;
+  }
+
+  $('.volume-icon').on('click', function () {
+    console.log(!sound.isPlaying)
+    if (!sound.isPlaying) {
+      sound.resume();
+      this.src = './imgs/volume.png';
+    } else {
+      sound.pause();
+      this.src = './imgs/volume_muted.png';
     }
-
-    $('.volume-icon').on('click', function () {
-        console.log(!sound.isPlaying)
-        if (!sound.isPlaying) {
-            sound.resume();
-            this.src = './imgs/volume.png';
-        } else {
-            sound.pause();
-            this.src = './imgs/volume_muted.png';
-        }
-    });
+  });
 }
 
 
@@ -30,96 +30,103 @@ function loadMusic(file) {
 
 
 function loadLevel(id) {
-    const level = LEVELS.find(level => level.id === id);
+  const level = LEVELS.find(level => level.id === id);
 
-    if (!level) {
-        console.error(`Level "${id}" does not exist!`);
-        return;
-    } else if (level.tutorial) {
-        startTutorial(level);
-        return;
-    }
+  if (!level) {
+    console.error(`Level "${id}" does not exist!`);
+    return;
+  } else if (level.tutorial) {
+    startTutorial(level);
+    return;
+  } else if (level.endless) {
+    endless();
+    return;
+  }
 
-    if (level.olof?.enabled) {
-        loadOlof(level.olof);
-    }
+  if (level.olof?.enabled) {
+    loadOlof(level.olof);
+  }
 
-    const walls = addWalls(level.wallPositions);
-    const trees = addTrees(level.treePositions);
+  const walls = addWalls(level.wallPositions);
+  const trees = addTrees(level.treePositions);
 
-    walls.forEach(wall => { app.stage.addChild(wall); });
-    trees.forEach(tree => { app.stage.addChild(tree); });
+  walls.forEach(wall => { app.stage.addChild(wall); });
+  trees.forEach(tree => { app.stage.addChild(tree); });
 
-    currentLevel.trees = trees;
-    currentLevel.walls = walls;
+  currentLevel.trees = trees;
+  currentLevel.walls = walls;
 
-    currentLevel.levelData = level;
+  currentLevel.levelData = level;
 
-    baseSpeed = level.player.speed || DEFAULT_baseSpeed;
+  baseSpeed = level.player.speed || DEFAULT_baseSpeed;
 
-    sprite.x = level.player.spawn.x;
-    sprite.y = level.player.spawn.y;
+  sprite.x = level.player.spawn.x;
+  sprite.y = level.player.spawn.y;
 
-    addSnowParticles(level.snowParticleAmount);
-    setInterval(updateTrees, level.snowTimer);
+  addSnowParticles(level.snowParticleAmount);
+  setInterval(updateTrees, level.snowTimer);
 
-    if (level.night?.enabled) {
-        loadNight(level.night);
-    }
+  if (level.night?.enabled) {
+    loadNight(level.night);
+  }
 
-    if (level.music) loadMusic(level.music);
-
-
-    setUpTimer(level.time);
+  if (level.music) loadMusic(level.music);
 
 
+  setUpTimer(level.time);
+
+  setTimeout(() => {
     levelLoaded = true;
+
+  }, 500);
+
+
 
 
 }
 
 function unLoadLevel() {
-    levelLoaded = false;
+  levelLoaded = false;
 
-    currentLevel.walls.forEach(wall => { wall?.destroy({ children: true }); });
-    currentLevel.trees.forEach(tree => { tree?.destroy({ children: true }) });
-    delete currentLevel.walls;
-    delete currentLevel.trees;
-    currentLevel = {
-        walls: [],
-        trees: []
-    };
+  currentLevel.walls.forEach(wall => { wall?.destroy({ children: true }); });
+  currentLevel.trees.forEach(tree => { tree?.destroy({ children: true }) });
+  delete currentLevel.walls;
+  delete currentLevel.trees;
+  currentLevel = {
+    walls: [],
+    trees: []
+  };
 
-    olofCircle?.destroy(); olofCircle = undefined;
-    nightPlayerCircle?.destroy(); nightPlayerCircle = undefined;
-    olof?.destroy(); olof = undefined;
+  olofCircle?.destroy(); olofCircle = undefined;
+  nightPlayerCircle?.destroy(); nightPlayerCircle = undefined;
+  olof?.destroy(); olof = undefined;
 }
 
 
 function loadNight(data) {
-    if (nightPlayerCircle) nightPlayerCircle.destroy();
+  if (nightPlayerCircle) nightPlayerCircle.destroy();
 
-    if (!data.olofView) {
-        var gr = new PIXI.Graphics();
-        gr.lineStyle(2.5, 0xFFFFFF, 1);
+  if (!data.olofView) {
+    var gr = new PIXI.Graphics();
+    gr.lineStyle(2.5, 0xFFFFFF, 1);
 
-        const points = calcPointsCirc(0, 0, data.radius, 5);
+    const points = calcPointsCirc(0, 0, data.radius, 5);
 
-        for (const point of points) {
-            gr.moveTo(point.x, point.y);
-            gr.lineTo(point.ex, point.ey);
-        }
-
-        var texture = app.renderer.generateTexture(gr);
-        nightPlayerCircle = new PIXI.Sprite(texture);
-        nightPlayerCircle.anchor.set(0.5);
-
-        app.stage.addChild(nightPlayerCircle);
+    for (const point of points) {
+      gr.moveTo(point.x, point.y);
+      gr.lineTo(point.ex, point.ey);
     }
 
-    nightData = data;
+    var texture = app.renderer.generateTexture(gr);
+    nightPlayerCircle = new PIXI.Sprite(texture);
+    nightPlayerCircle.anchor.set(0.5);
 
-    updateMask();
+    app.stage.addChild(nightPlayerCircle);
+  }
+
+  nightData = data;
+
+  updateMask();
 }
 
 
@@ -129,142 +136,288 @@ const LEVELS = [
 
 
 
-    {
-        "id": "test",
-        "title": "TESTING !!!",
-        "wallPositions": [
-            // { "x1": 100, "y1": 100, "x2": 100 + (10 * WALL_SIZE), "y2": 100 }
-        ],
-        "treePositions": [
-            // { "x": 500, "y": 500 },
-            // { "x": 100, "y": 500 },
-            // { "x": 800, "y": 500 },
-        ],
-        "olof": {
-            "enabled": true,
-            "spawns": [
-                { x: 250, y: 200 },
-                { x: 250, y: 200 },
-                { x: 250, y: 200 }
-            ],
-            "speed": 5,
-            "roaming": true,
-            "huntRadius": 175,
-            "roamRadius": 100
-        },
-        "night": {
-            "enabled": false,
-            "radius": 200,
-            "olofView": false
-        },
-        "playerSpeed": 4,
-        "time": {
-            "start": '2069-04-20 09:00',
-            "end": '2069-04-20 15:00',
-            "realTime": 3,
-        },
-        "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
-        "pointCap": 1500000000000,
+  {
+    "id": "test",
+    "title": "TESTING !!!",
+    "wallPositions": [
+      // { "x1": 100, "y1": 100, "x2": 100 + (10 * WALL_SIZE), "y2": 100 }
+    ],
+    "treePositions": [
+      // { "x": 500, "y": 500 },
+      // { "x": 100, "y": 500 },
+      // { "x": 800, "y": 500 },
+    ],
+    "olof": {
+      "enabled": true,
+      "spawns": [
+        { x: 250, y: 200 },
+        { x: 250, y: 200 },
+        { x: 250, y: 200 }
+      ],
+      "speed": 5,
+      "roaming": true,
+      "huntRadius": 175,
+      "roamRadius": 100
     },
-
-    {
-        "tutorial": true,
-        "id": "tutorial",
-        "title": "Tutorial",
-        "playerSpeed": 4,
-        "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
+    "night": {
+      "enabled": false,
+      "radius": 200,
+      "olofView": false
     },
-
-    {
-        "id": "level_1",
-        "title": "Level 1",
-        "wallPositions": [
-            {x: 250, y: 150, dx: 0, dy: 7 * WALL_SIZE},
-            {x: 250 + WALL_SIZE, y: 150 + 3 * WALL_SIZE, dx: 13 * WALL_SIZE, dy: 0},
-            {x: 250 + 14 * WALL_SIZE, y: 150, dx: 0, dy: 7 * WALL_SIZE},
-            {x: 250 + 4 * WALL_SIZE, y: 150 + 4 * WALL_SIZE, dx: 0, dy: 3 * WALL_SIZE}
-        ],
-        "treePositions": [
-            { "x": 500, "y": 600 },
-            // { "x": 100, "y": 500 },
-            // { "x": 800, "y": 500 },
-        ],
-        "olof": {
-            "enabled": true,
-            "spawns": [
-                { x: 250, y: 200 },
-                { x: 250, y: 200 },
-                { x: 250, y: 200 }
-            ],
-            "speed": 5,
-            "roaming": true,
-            "huntRadius": 175,
-            "roamRadius": 100
-        },
-        "night": {
-            "enabled": false,
-            "radius": 200,
-            "olofView": false
-        },
-        "player": {
-            "speed": 4,
-            "spawn": {x: 1000, y: 500}
-        },
-        "snowTimer": 1500,
-        "snowParticleAmount": 150,
-        "time": {
-            "start": '2069-04-20 09:00',
-            "end": '2069-04-20 15:00',
-            "realTime": 180,
-        },
-        "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
-        "pointCap": 150000000,
+    "playerSpeed": 4,
+    "time": {
+      "start": '2069-04-20 09:00',
+      "end": '2069-04-20 15:00',
+      "realTime": 3,
     },
+    "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
+    "pointCap": 1500000000000,
+  },
 
-    {
-        "id": "exported_level",
-        "title": "Exported Level",
-        "wallPositions": [
-          {
-            "x": 8,
-            "y": 8,
-            "dx": 0,
-            "dy": 48
-          }
-        ],
-        "treePositions": [],
-        "olof": {
-          "enabled": false,
-          "spawns": [],
-          "speed": 5,
-          "roaming": true,
-          "huntRadius": 175,
-          "roamRadius": 100
-        },
-        "night": {
-          "enabled": false,
-          "radius": 200,
-          "olofView": false
-        },
-        "player": {
-          "speed": 4,
-          "spawn": {
-            "x": 440,
-            "y": 248
-          }
-        },
-        "snowTimer": 1500,
-        "snowParticleAmount": 150,
-        "time": {
-          "start": "2069-04-20T07:00:00.000Z",
-          "end": "2069-04-20T13:00:00.000Z",
-          "realTime": 180
-        },
-        "music": "music/gtkiajnieoifawhniotftganwiofranfoia.mp3",
-        "pointCap": 150000000
+  {
+    "tutorial": true,
+    "id": "tutorial",
+    "title": "Tutorial",
+    "playerSpeed": 4,
+    "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
+  },
+
+  {
+    "endless": true,
+    "id": "endless",
+    "title": "Endless",
+    "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
+  },
+
+  {
+    "id": "level_1",
+    "title": "Level 1",
+    "wallPositions": [
+      { x: 250, y: 150, dx: 0, dy: 7 * WALL_SIZE },
+      { x: 250 + WALL_SIZE, y: 150 + 3 * WALL_SIZE, dx: 13 * WALL_SIZE, dy: 0 },
+      { x: 250 + 14 * WALL_SIZE, y: 150, dx: 0, dy: 7 * WALL_SIZE },
+      { x: 250 + 4 * WALL_SIZE, y: 150 + 4 * WALL_SIZE, dx: 0, dy: 3 * WALL_SIZE }
+    ],
+    "treePositions": [
+      { "x": 500, "y": 600 },
+      // { "x": 100, "y": 500 },
+      // { "x": 800, "y": 500 },
+    ],
+    "olof": {
+      "enabled": true,
+      "spawns": [
+        { x: 250, y: 200 },
+        { x: 250, y: 200 },
+        { x: 250, y: 200 }
+      ],
+      "speed": 5,
+      "roaming": true,
+      "huntRadius": 175,
+      "roamRadius": 100
+    },
+    "night": {
+      "enabled": false,
+      "radius": 200,
+      "olofView": false
+    },
+    "player": {
+      "speed": 4,
+      "spawn": { x: 1000, y: 500 }
+    },
+    "snowTimer": 1500,
+    "snowParticleAmount": 150,
+    "time": {
+      "start": '2069-04-20 09:00',
+      "end": '2069-04-20 15:00',
+      "realTime": 180,
+    },
+    "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
+    "pointCap": 150000000,
+  },
+
+  {
+    "id": "level_11",
+    "title": "Level 11",
+    "wallPositions": [
+      {
+        "x": 336,
+        "y": 288,
+        "dx": 624,
+        "dy": 0
+      },
+      {
+        "x": 288,
+        "y": 144,
+        "dx": 0,
+        "dy": 336
+      },
+      {
+        "x": 960,
+        "y": 144,
+        "dx": 0,
+        "dy": 336
+      },
+      {
+        "x": 576,
+        "y": 0,
+        "dx": 0,
+        "dy": 288
+      },
+      {
+        "x": 624,
+        "y": 0,
+        "dx": 0,
+        "dy": 288
+      },
+      {
+        "x": 672,
+        "y": 0,
+        "dx": 0,
+        "dy": 288
+      },
+      {
+        "x": 528,
+        "y": 336,
+        "dx": 0,
+        "dy": 144
+      },
+      {
+        "x": 720,
+        "y": 336,
+        "dx": 0,
+        "dy": 144
       }
+    ],
+    "treePositions": [
+      {
+        "x": 459,
+        "y": 227
+      },
+      {
+        "x": 843,
+        "y": 227
+      },
+      {
+        "x": 651,
+        "y": 467
+      }
+    ],
+    "olof": {
+      "enabled": true,
+      "spawns": [
+        {
+          "x": 384,
+          "y": 384
+        },
+        {
+          "x": 864,
+          "y": 384
+        }
+      ],
+      "speed": 5,
+      "roaming": true,
+      "huntRadius": 175,
+      "roamRadius": 100
+    },
+    "night": {
+      "enabled": false,
+      "radius": 200,
+      "olofView": false
+    },
+    "player": {
+      "speed": 4,
+      "spawn": {
+        "x": 1200,
+        "y": 48
+      }
+    },
+    "snowTimer": 1500,
+    "snowParticleAmount": 150,
+    "time": {
+      "start": "2069-04-20 09:00",
+      "end": "2069-04-20 15:00",
+      "realTime": 180
+    },
+    "music": "music/gtkiajnieoifawhniotftganwiofranfoia.mp3",
+    "pointCap": 150000000
+  },
 
-
+  {
+    "id": "exported_level",
+    "title": "Exported Level",
+    "wallPositions": [
+      {
+        "x": 144,
+        "y": 240,
+        "dx": 624,
+        "dy": 0
+      },
+      {
+        "x": 720,
+        "y": 0,
+        "dx": 0,
+        "dy": 240
+      },
+      {
+        "x": 144,
+        "y": 0,
+        "dx": 0,
+        "dy": 240
+      },
+      {
+        "x": 240,
+        "y": 96,
+        "dx": 48,
+        "dy": 0
+      },
+      {
+        "x": 336,
+        "y": 96,
+        "dx": 384,
+        "dy": 0
+      }
+    ],
+    "treePositions": [
+      {
+        "x": 939,
+        "y": 611
+      }
+    ],
+    "olof": {
+      "enabled": true,
+      "spawns": [
+        {
+          "x": 432,
+          "y": 192
+        }
+      ],
+      "speed": 5,
+      "roaming": true,
+      "huntRadius": 175,
+      "roamRadius": 100
+    },
+    "night": {
+      "enabled": false,
+      "radius": 200,
+      "olofView": false
+    },
+    "player": {
+      "speed": 4,
+      "spawn": {
+        "x": 432,
+        "y": 288
+      }
+    },
+    "snowTimer": 1500,
+    "snowParticleAmount": 150,
+    "time": {
+      "start": "2069-04-20 09:00",
+      "end": "2069-04-20 15:00",
+      "realTime": 180
+    },
+    "music": "music/gtkiajnieoifawhniotftganwiofranfoia.mp3",
+    "pointCap": 150000000
+  }
 ]
 
 

@@ -21,6 +21,7 @@ function updateMovementInteraction() {
 
     for (const wall of currentLevel.walls) {
         b.hit(sprite, wall, true);
+        if (olof) b.hit(olof, wall, true);
     }
 
     // for (const tree of currentLevel.trees) {
@@ -274,7 +275,6 @@ function getTouchSide(r1, r2) {
     vy = (r1.gy + Math.abs(r1.halfHeight) - r1.yAnchorOffset) - (r2.gy + Math.abs(r2.halfHeight) - r2.yAnchorOffset);
     combinedHalfWidths = Math.abs(r1.halfWidth) + Math.abs(r2.halfWidth);
     combinedHalfHeights = Math.abs(r1.halfHeight) + Math.abs(r2.halfHeight);
-    console.log(r1, r2);
     if (Math.abs(vx) < combinedHalfWidths) {
         if (Math.abs(vy) < combinedHalfHeights) {
             overlapX = combinedHalfWidths - Math.abs(vx);

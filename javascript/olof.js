@@ -176,7 +176,7 @@ function updateOlof() {
 
     fps++;
 
-    
+
 
     if (doesOlofSeeMe(center_x, center_y, x, y, dx, dy, angle) && !fallenOver) {
         levelStats.olofFrames++;
@@ -193,10 +193,12 @@ function updateOlof() {
         olofCircle.texture = generateOlofRadiusRing(olof.radius);
 
         if (olof.settings.roaming) {
-
             if (!olofWayPoint.x || isPointInCircle(olofWayPoint.x, olofWayPoint.y, 250, olof.x, olof.y)) {
+
                 olofWayPoint.x = random(0, WIDTH);
                 olofWayPoint.y = random(0, HEIGHT);
+
+                olofWayPoint = olofSeesAClearPath(olofWayPoint);
             }
 
             const x = olofWayPoint.x;
@@ -262,8 +264,31 @@ function isPointInCircle(centerX, centerY, radius, x, y) {
     return false;
 }
 
+function olofSeesAClearPath(waypoint) {
 
+    const points = [];
+    const dx = waypoint.x - olof.x;
+    const dy = waypoint.y - olof.y;
+    const hyp = Math.sqrt((dx * dx) + (dy * dy));
+    const angle = Math.atan2(dy, dx)
 
+    for (let i = 0; i < hyp; i+=6) {
+        const calcX = Math.cos(angle) * i;
+        const calcY = Math.sin(angle) * i;
+        points.push({ x: olof.x + calcX, y: olof.y + calcY })
+    }
+
+    for (const point of points) {
+        for (const wall of currentLevel.walls) {
+            if (b.hit(point, wall)) {
+                return point;
+            }
+            
+        }
+
+    }
+    return waypoint;
+}
 
 
 
