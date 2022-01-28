@@ -1,0 +1,41 @@
+{
+  "__link": "",
+  "id": "1643367722462sdasdasdsa",
+  "title": "sdasdasdsa",
+  "wallPositions": [],
+  "treePositions": [
+    {
+      "x": 987,
+      "y": 370
+    }
+  ],
+  "olof": {
+    "enabled": false,
+    "spawns": [],
+    "speed": 5,
+    "roaming": true,
+    "huntRadius": 175,
+    "roamRadius": 100
+  },
+  "night": {
+    "enabled": false,
+    "radius": 200,
+    "olofView": false
+  },
+  "player": {
+    "speed": 4,
+    "spawn": {
+      "x": 480,
+      "y": 672
+    }
+  },
+  "snowTimer": 1500,
+  "snowParticleAmount": 150,
+  "time": {
+    "start": "2069-04-20 09:00",
+    "end": "2069-04-20 15:00",
+    "realTime": 120
+  },
+  "music": "music/gtkiajnieoifawhniotftganwiofranfoia.mp3",
+  "pointCap": 150000000
+}

@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Level editor</title>
-
     <script src="../javascript/libs/jcurry.min.js"></script>
-
     <style>
         * {
             image-rendering: pixelated;
@@ -27,7 +25,6 @@
             resize: none;
         }
 
-
         .hamburger {
             position: absolute;
             top: 50px;
@@ -44,9 +41,10 @@
             right: 0;
             border: 3px solid white;
             border-right: 0;
-            height: 99vh;
+            height: calc(99vh - 40px);
             background-color: black;
             width: 324px;
+            padding: 20px;
         }
 
         .open-menu {
@@ -77,8 +75,6 @@
             }
         }
 
-
-
         .bar1,
         .bar2,
         .bar3 {
@@ -103,19 +99,17 @@
             transform: rotate(45deg) translate(-8px, -8px);
         }
 
-
         .container-radio {
             display: block;
             position: relative;
             padding-left: 35px;
             margin-bottom: 12px;
             cursor: pointer;
-            font-size: 22px;
+            font-size: 15px;
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            padding-top: 2px;
         }
 
         /* Hide the browser's default radio button */
@@ -130,12 +124,11 @@
             position: absolute;
             top: 0;
             left: 0;
-            height: 25px;
-            width: 25px;
+            height: 15px;
+            width: 15px;
             border: 1px dashed white;
             border-radius: 50%;
         }
-
 
         /* When the radio button is checked, add a blue background */
         .container-radio input:checked~.checkmark {
@@ -162,13 +155,6 @@
             margin-left: 20px;
         }
 
-
-
-
-
-
-
-
         /* The container */
         .container-checks {
             display: block;
@@ -180,7 +166,6 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            padding-top: 2px;
         }
 
         /* Hide the browser's default checkbox */
@@ -199,9 +184,8 @@
             left: 0;
             height: 18px;
             width: 18px;
-            border: 2px dashed white;
+            border: 0.5px solid white;
         }
-
 
         /* When the checkbox is checked, add a blue background */
         .container-checks input:checked~.checkmark-check {
@@ -219,104 +203,154 @@
         .container-checks input:checked~.checkmark-check:after {
             display: block;
         }
-    </style>
 
+        /* Style the checkmark/indicator */
+        .container-checks .checkmark-check:after {
+            left: 5px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid black;
+            border-width: 0 3px 3px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+
+        .doneBtn {
+            padding: 5px;
+            border: 0.5px solid white;
+        }
+
+        .doneBtn:hover {
+            background-color: white;
+            color: black;
+        }
+    </style>
 </head>
 
 <body>
     <canvas id="canvas"></canvas>
-
-
     <div class="hamburger">
-
-
         <div class="container" onclick="myFunction(this)">
             <div class="bar1"></div>
             <div class="bar2"></div>
             <div class="bar3"></div>
         </div>
-
-
     </div>
-
-
     <div id="menu" style="display: none;">
-
-        <label class="container-radio">Vertical wall
-            <input type="radio" checked="checked" name="radio" value="vwall">
+        <label class="container-radio">Vertical wall <input type="radio" checked="checked" name="radio" value="vwall">
             <span class="checkmark"></span>
         </label>
-        <label class="container-radio">Horizontal wall
-            <input type="radio" name="radio" value="hwall">
+        <label class="container-radio">Horizontal wall <input type="radio" name="radio" value="hwall">
             <span class="checkmark"></span>
         </label>
-        <label class="container-radio">Tree
-            <input type="radio" name="radio" value="tree">
+        <label class="container-radio">Tree <input type="radio" name="radio" value="tree">
             <span class="checkmark"></span>
         </label>
-        <label class="container-radio">Player spawn
-            <input type="radio" name="radio" value="pspawn">
+        <label class="container-radio">Player spawn <input type="radio" name="radio" value="pspawn">
             <span class="checkmark"></span>
         </label>
-        <label class="container-radio">Olof spawn
-            <input type="radio" name="radio" value="ospawn">
+        <label class="container-radio">Olof spawn (1 olof, multiple spawns) <input type="radio" name="radio" value="ospawn">
             <span class="checkmark"></span>
         </label>
-
-        <br> <br>
-
         <div class="olof-changer">
             <span style="font-size: 20px;">Olof:</span> <br>
-
-            <label class="undercatergory" for="olofSpeed">Speed:
-                <input type="text" id="olofSpeed" style="width: 30px;"> <span>(number, default = 5)</span>
+            <label class="undercatergory" for="olofSpeed">Speed: <input type="text" id="olofSpeed" style="width: 30px;"> <span>(number, default = 4)</span>
             </label>
-
             <br>
-
-            <label class="container-checks undercatergory">Roaming (moving around)
-                <input type="checkbox" checked="checked">
+            <label class="container-checks undercatergory">Roaming (moving around) <input id="olof-roam" type="checkbox" checked="checked">
                 <span class="checkmark-check"></span>
             </label>
-
-
-            <label class="undercatergory" for="olofSpeed">Roam radius:
-                <input type="text" id="olofSpeed" style="width: 30px;"> <span>(number, pixles)</span>
+            <label class="undercatergory" for="huntRadius" id="huntRadius-label">Hunt radius: <input type="text" id="huntRadius" style="width: 30px;"> <span>(number, pixles)</span>
+                <br>
             </label>
-
-
-            <br>
-
-            <label class="undercatergory" for="olofSpeed">Hunt radius:
-                <input type="text" id="olofSpeed" style="width: 30px;"> <span>(number, pixles)</span>
+            <label class="undercatergory" for="roamRadius" id="roamRadius-label">Roam radius: <input type="text" id="roamRadius" style="width: 30px;"> <span>(number, pixles)</span>
+                <br>
             </label>
-
+            <label style="display: none;" class="undercatergory" for="olofradius" id="olofradius-label">Radius: <input type="text" id="olofradius" style="width: 30px"> <span>(number, pixles)</span>
+            </label>
         </div>
+        <br>
+        <div class="player-changer">
+            <span style="font-size: 20px;">Player:</span> <br>
+            <label class="undercatergory" for="playerSpeed">Speed: <input type="text" id="playerSpeed" style="width: 30px;"> <span>(number, default = 5)</span>
+            </label>
+        </div>
+        <br>
+        <div class="night-changer">
+            <span style="font-size: 20px;">Night:</span> <br>
+            <label class="container-checks undercatergory">Night mode <input id="night-mode" type="checkbox"">
+                <span class=" checkmark-check"></span>
+            </label>
+            <label style="display: none;" class="container-checks undercatergory" id="olofView-label">Olof view<input id="olofView" type="checkbox">
+                <span class="checkmark-check"></span>
+            </label>
+            <label style="display: none;" class="undercatergory" for="nightRadius" id="nightRadius-label">Radius<input type="text" id="nightRadius" style="width: 30px;"> <span>(number, pixles)</span>
+            </label>
+        </div>
+        <br>
+        <div class="level-changer">
+            <span style="font-size: 20px;">Level:</span> <br>
+            <label class="undercatergory" for="title">Title: <input type="text" id="title" style="width: 150px;"><span></span>
+            </label> <br>
+            <label class="undercatergory" for="snowtimer">Snow Timer <input type="text" id="snowtimer" style="width: 50px;"><span>s (how often snow falls)</span>
+            </label>
+            <label class="undercatergory" for="particleAmount">Particle amount <input type="text" id="particleAmount" style="width: 30px;"> <span>(number)</span>
+            </label>
+            <br>
+            <label class="undercatergory" for="realtime">Realtime length <input type="text" id="realtime" style="width: 30px;"> <span>(seconds, number)</span>
+            </label>
+            <br>
+            <label class="undercatergory" for="igTimeStart">In game time start <input type="text" id="igTimeStart" style="width: 30px;"> <span>(XX:XX)</span>
+            </label>
+            <br>
+            <label class="undercatergory" for="igTimeEnd">In game time end <input type="text" id="igTimeEnd" style="width: 30px;"> <span>(XX:XX)</span>
+            </label>
+        </div>
+        <br> 
+        
+        <table>
+            <tr>
+                <td>Music</td>
+                <td>Music</td>
+                <td>Music</td>
+            </tr>
+            <tr>
+                <td>Music</td>
+                <td>Music</td>
+                <td>Music</td>
+            </tr>
+        </table>
 
         <br>
-        <br>
-        <br>
-        <br>
-
-
-        <button onclick="document.getElementById('output').value = JSON.stringify(exportGrid(), null, 2)">Export to
-            JSON</button>
-
-        <br>
-
-        <textarea id="output" cols="30" rows="10"></textarea>
+        <a class="doneBtn" onclick="downloadJSON(exportGrid(), `snowshake-park-level-${simplifyTitle(getExportedFilename())}`);">Export to JSON</a> &nbsp;&nbsp; <a class="doneBtn">Save to your game</a>
 
     </div>
-
-
-
-
-
-
-
-
-
     <script>
+
+        $('#olof-roam').on('change', function () {
+            if (this.checked) {
+                $('#huntRadius-label').show();
+                $('#roamRadius-label').show();
+                $('#olofradius-label').hide();
+            } else {
+                $('#huntRadius-label').hide();
+                $('#roamRadius-label').hide();
+                $('#olofradius-label').show();
+            }
+        });
+
+        $('#night-mode').on('change', function () {
+            if (this.checked) {
+                $('#olofView-label').show();
+                $('#nightRadius-label').show();
+            } else {
+                $('#olofView-label').hide();
+                $('#nightRadius-label').hide();
+            }
+        })
+
         function myFunction(x) {
             x.classList.toggle("change");
             const y = document.getElementById('menu');
@@ -355,8 +389,8 @@
                 img: 'tree',
                 width: 144,
                 height: 168,
-                dx: 0,
-                dy: -72
+                dx: -48,
+                dy: -120
             },
             {
                 id: 'pspawn',
@@ -403,8 +437,8 @@
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         document.onmousemove = function (event) {
-            let x = event.pageX;
-            let y = event.pageY;
+            let x = event.pageX + TILESIZE / 2;
+            let y = event.pageY + TILESIZE / 2;
 
             if (isWithinGrid(x, y)) {
                 redraw();
@@ -421,8 +455,8 @@
         }
 
         document.onclick = function (event) {
-            let x = event.pageX;
-            let y = event.pageY;
+            let x = event.pageX + TILESIZE / 2;
+            let y = event.pageY + TILESIZE / 2;
 
             if (isWithinGrid(x, y) && event.target.id == 'canvas') {
                 let gridX = Math.round(x / TILESIZE) - 1;
@@ -482,6 +516,64 @@
             ctx.drawImage(getImage(id), x * TILESIZE + dx, y * TILESIZE + dy, width, height);
         }
 
+        function getInput() {
+            return {
+                title: $('#title').val(),
+                olof: {
+                    speed: getNumber($('#olofspeed').val(), 5),
+                    roaming: $('#olof-roam').is(':checked'),
+                    huntRadius: $('#olof-roam').is(':checked') ? getNumber($('#huntRadius').val(), 175) : getNumber($('#olofradius').val(), 175),
+                    roamRadius: getNumber($('#roamRadius').val(), 100)
+                },
+                player: {
+                    speed: getNumber($('#playerSpeed').val(), 4)
+                },
+                night: {
+                    enabled: $('#night-mode').is(':checked'),
+                    olofView: $('#olof-view').is(':checked'),
+                    radius: getNumber($('#nightRadius').val(), 200)
+                },
+                snowTimer: getNumber($('#snowtimer').val(), 1500),
+                snowParticleAmount: getNumber($('#particleAmount').val(), 150),
+                time: {
+                    realTime: getNumber($('#realtime').val(), 120),
+                    start: '2069-04-20 ' + getTime($('#igTimeStart').val(), '09:00'),
+                    end: '2069-04-20 ' + getTime($('#igTimeEnd').val(), '15:00')
+                }
+            }
+        }
+
+        function getExportedFilename() {
+            return simplifyTitle($('#title').val());
+        }
+
+        function getNumber(string, defauld = 0) {
+            const validNumber = new RegExp('^[0-9]+\.?[0-9]*$');
+
+            if (validNumber.test(string)) {
+                return JSON.parse(string);
+            }
+            else return defauld;
+        }
+
+        function getTime(string, defauld = '00:00') {
+            const validTime = new RegExp('^[0-9]{2}:[0-9]{2}$');
+
+            if (validTime.test(string)) {
+                return string;
+            }
+            else return defauld;
+        }
+
+        function simplifyTitle(title = "") {
+            const matches =  title.matchAll(/\w/g);
+            let string = "";
+            for (const s of matches) {
+                string += s[0];
+            }
+            return string;
+        }
+
         function exportGrid() {
             if (grid.find(x => x.id == 'pspawn') == undefined) {
                 alert('Please add a player spawnpoint!');
@@ -508,7 +600,7 @@
                         }
                         else {
                             connection.push(wall);
-                        }
+                        } 
                     }
                 }
                 else if (obj.id === 'vwall' && wallConnections.find(w => w.includes(obj)) == undefined) {
@@ -527,7 +619,7 @@
                 }
                 else if (obj.id === 'tree') trees.push({
                     x: (obj.x + 1) * TILESIZE + 27,
-                    y: (obj.y + 1) * TILESIZE + 35
+                    y: (obj.y + 1) * TILESIZE + 34
                 });
                 else if (obj.id === 'ospawn') olofSpawns.push({
                     x: obj.x * TILESIZE,
@@ -544,43 +636,57 @@
                 });
             }
 
-            return {
-                id: 'exported_level',
-                title: 'Exported Level',
+            const input = getInput();
+            const json = {
+                __LINK: "https://weep-studios.itch.io/snowshake-park",
+                id: simplifyTitle(input.title) + '-' + new Date().getTime(),
+                title: input.title,
                 wallPositions: walls,
                 treePositions: trees,
                 olof: {
                     enabled: olofSpawns.length > 0,
                     spawns: olofSpawns,
-                    speed: 5,
-                    roaming: true,
-                    huntRadius: 175,
-                    roamRadius: 100
+                    speed: input.olof.speed,
+                    roaming: input.olof.roaming,
+                    huntRadius: input.olof.huntRadius,
+                    roamRadius: input.olof.roamRadius
                 },
                 night: {
-                    enabled: false,
-                    radius: 200,
-                    olofView: false
+                    enabled: input.night.enabled,
+                    radius: input.night.radius,
+                    olofView: input.night.olofView
                 },
                 player: {
-                    speed: 4,
+                    speed: input.player.speed,
                     spawn: {
                         x: grid.find(x => x.id == 'pspawn').x * TILESIZE,
                         y: grid.find(x => x.id == 'pspawn').y * TILESIZE
                     }
                 },
-                snowTimer: 1500,
-                snowParticleAmount: 150,
+                snowTimer: input.snowTimer,
+                snowParticleAmount: input.snowParticleAmount,
                 time: {
-                    start: '2069-04-20 09:00',
-                    end: '2069-04-20 15:00',
-                    realTime: 180,
+                    start: input.time.start,
+                    end: input.time.end,
+                    realTime: input.time.realTime
                 },
                 music: 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
                 pointCap: 150000000
             };
+            return json;
         }
+
+
+
+        function downloadJSON(obj, filename) {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj, null, 2));
+            const dlAnchorElem = document.getElementById('downloadAnchorElem');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", filename + ".json");
+            dlAnchorElem.click();
+        }
+
     </script>
 </body>
-
+<a id="downloadAnchorElem" style="display:none"></a>
 </html>
