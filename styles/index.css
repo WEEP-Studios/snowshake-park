@@ -17,6 +17,10 @@ body, html {
     text-align: center;
 }
 
+.cred-text {
+    margin-bottom: 200px;
+}
+
 
 .btn-link, #play-game-text, .btn-gamemode {
     border: 2px solid white;
@@ -48,7 +52,7 @@ body, html {
     justify-content: space-evenly;
 
     left: 25%;
-    top: calc(50% - 1%);
+    top: calc(50% - 15%);
 }
 
 .btn-gamemode {
@@ -111,6 +115,11 @@ body, html {
 }
 
 .levels {
+    display: none;
+}
+
+
+.userlevels {
     display: none;
 }
 

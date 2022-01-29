@@ -28,8 +28,8 @@
 .timer {
     position: absolute;
     z-index: 10000000;
-    font-size: xxx-large;
-    background: black;
+    font-size: x-large;
+    /* background: black; */
     top: 0;
     right: 15px;
 }
@@ -82,7 +82,7 @@
 
 #tutorial-text {
     text-align: center;
-    font-size: 1.8em;
+    font-size: 1.2em;
     display: flex;
     justify-content: space-evenly;
 

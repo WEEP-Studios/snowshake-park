@@ -13,15 +13,11 @@ function gameOver(success) {
 
     
 
-    console.warn('AAAAA', success);
-
     $('.game-over-screen').show();
     $('.timer').hide();
 
     let sum = 0; fpsList.forEach(fps => sum += fps);
     const avrageFPS = sum / fpsList.length;
-    console.log('time in olof is', Math.round((levelStats.olofFrames / avrageFPS) * 100) / 100);
-
     $(`
     
     <table class="stats-table">
@@ -40,7 +36,7 @@ function gameOver(success) {
 
     <tr>
         <td>Time within Olof's range</td>
-        <td>${(Math.round((levelStats.olofFrames / avrageFPS) * 100) / 100)}s</td>
+        <td>${((Math.round((levelStats.olofFrames / avrageFPS) * 100) / 100) !== NaN ? (Math.round((levelStats.olofFrames / avrageFPS) * 100) / 100): 0)}s</td>
     </tr>
 
     <tr>
@@ -70,14 +66,14 @@ function gameOver(success) {
      * för varje levande träd: 10000 poäng
      * alla träd bonus: 10000 poäng
      * skaka träd: 600p
-     * olof escape: 1500p
+     * olof escape: -800p
      * olof träff: -2000p
      */
 
     pointSum += aliveTrees * 10000;
     pointSum += (aliveTrees === totaltrees ? 10000 : 0);
     pointSum += levelStats.treeShakes * 600;
-    pointSum -= levelStats.olofEscapes * 1500;
+    pointSum -= levelStats.olofEscapes * 800;
     pointSum -= levelStats.olofKnocks * 2000;
 
     pointSum = (pointSum < 0 ? 0 : pointSum);

@@ -6,10 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Level editor</title>
     <script src="../javascript/libs/jcurry.min.js"></script>
+
     <style>
         * {
             image-rendering: pixelated;
             overflow: hidden;
+            font-family: sans-serif;
+            font-size: 12px;
+        }
+
+        @font-face {
+            font-family: "Bungee-Regular";
+            src: url('../fonts/Bungee-Regular.ttf');
+        }
+
+        .container-radio, .container-radio-2, .options-title {
+            font-family: "Bungee-Regular", sans-serif !important;
+            font-size: 16px !important;
+            line-height: 1.1em;
+        }
+
+        .options-title {
+            font-size: 20px;
         }
 
         body,
@@ -27,12 +45,14 @@
 
         .hamburger {
             position: absolute;
-            top: 50px;
+            top: 28px;
             right: 0;
             padding: 10px;
             border: 3px solid white;
             border-right: 0;
             z-index: 100;
+            background-color: black;
+            cursor: pointer;
         }
 
         #menu {
@@ -103,9 +123,20 @@
             display: block;
             position: relative;
             padding-left: 35px;
-            margin-bottom: 12px;
+            margin-bottom: 6px;
             cursor: pointer;
-            font-size: 15px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .container-radio-2 {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 6px;
+            cursor: pointer;
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
@@ -115,6 +146,13 @@
         /* Hide the browser's default radio button */
         .container-radio input {
             position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Hide the browser's default radio button */
+        .container-radio-2 input {
+            /* position: absolute; */
             opacity: 0;
             cursor: pointer;
         }
@@ -135,6 +173,11 @@
             background-color: white;
         }
 
+        /* When the radio button is checked, add a blue background */
+        .container-radio-2 input:checked~.checkmark {
+            background-color: white;
+        }
+
         /* Create the indicator (the dot/circle - hidden when not checked) */
         .checkmark:after {
             content: "";
@@ -144,6 +187,11 @@
 
         /* Show the indicator (dot/circle) when checked */
         .container-radio input:checked~.checkmark:after {
+            display: block;
+        }
+
+        /* Show the indicator (dot/circle) when checked */
+        .container-radio-2 input:checked~.checkmark:after {
             display: block;
         }
 
@@ -161,11 +209,12 @@
             position: relative;
             padding-left: 26px;
             cursor: pointer;
-            font-size: 18px;
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
+
+            padding-bottom: 6px;
         }
 
         /* Hide the browser's default checkbox */
@@ -225,14 +274,19 @@
         .doneBtn:hover {
             background-color: white;
             color: black;
+            cursor: pointer;
+        }
+
+        #song-chooser .container-radio-2 {
+            margin-bottom: 0;
         }
     </style>
 </head>
 
 <body>
     <canvas id="canvas"></canvas>
-    <div class="hamburger">
-        <div class="container" onclick="myFunction(this)">
+    <div class="hamburger" onclick="myFunction(this)">
+        <div class="container">
             <div class="bar1"></div>
             <div class="bar2"></div>
             <div class="bar3"></div>
@@ -251,80 +305,118 @@
         <label class="container-radio">Player spawn <input type="radio" name="radio" value="pspawn">
             <span class="checkmark"></span>
         </label>
-        <label class="container-radio">Olof spawn (1 olof, multiple spawns) <input type="radio" name="radio" value="ospawn">
+        <label class="container-radio">Olof spawn (1 olof, multiple spawns) <input type="radio" name="radio"
+                value="ospawn">
             <span class="checkmark"></span>
         </label>
         <div class="olof-changer">
-            <span style="font-size: 20px;">Olof:</span> <br>
-            <label class="undercatergory" for="olofSpeed">Speed: <input type="text" id="olofSpeed" style="width: 30px;"> <span>(number, default = 4)</span>
+            <span class="options-title">Olof:</span> <br>
+            <label class="undercatergory" for="olofSpeed">Speed: <input type="text" id="olofSpeed" style="width: 30px;">
+                <span>(number, default = 4)</span>
             </label>
             <br>
-            <label class="container-checks undercatergory">Roaming (moving around) <input id="olof-roam" type="checkbox" checked="checked">
+            <label class="container-checks undercatergory">Roaming (moving around) <input id="olof-roam" type="checkbox"
+                    checked="checked">
                 <span class="checkmark-check"></span>
             </label>
-            <label class="undercatergory" for="huntRadius" id="huntRadius-label">Hunt radius: <input type="text" id="huntRadius" style="width: 30px;"> <span>(number, pixles)</span>
+            <label class="undercatergory" for="huntRadius" id="huntRadius-label">Hunt radius: <input type="text"
+                    id="huntRadius" style="width: 30px;"> <span>(number, pixles)</span>
                 <br>
             </label>
-            <label class="undercatergory" for="roamRadius" id="roamRadius-label">Roam radius: <input type="text" id="roamRadius" style="width: 30px;"> <span>(number, pixles)</span>
+            <label class="undercatergory" for="roamRadius" id="roamRadius-label">Roam radius: <input type="text"
+                    id="roamRadius" style="width: 30px;"> <span>(number, pixles)</span>
                 <br>
             </label>
-            <label style="display: none;" class="undercatergory" for="olofradius" id="olofradius-label">Radius: <input type="text" id="olofradius" style="width: 30px"> <span>(number, pixles)</span>
+            <label style="display: none;" class="undercatergory" for="olofradius" id="olofradius-label">Radius: <input
+                    type="text" id="olofradius" style="width: 30px"> <span>(number, pixles)</span>
             </label>
         </div>
         <br>
         <div class="player-changer">
-            <span style="font-size: 20px;">Player:</span> <br>
-            <label class="undercatergory" for="playerSpeed">Speed: <input type="text" id="playerSpeed" style="width: 30px;"> <span>(number, default = 5)</span>
+            <span class="options-title">Player:</span> <br>
+            <label class="undercatergory" for="playerSpeed">Speed: <input type="text" id="playerSpeed"
+                    style="width: 30px;"> <span>(number, default = 5)</span>
             </label>
         </div>
         <br>
         <div class="night-changer">
-            <span style="font-size: 20px;">Night:</span> <br>
+            <span class="options-title">Night:</span> <br>
             <label class="container-checks undercatergory">Night mode <input id="night-mode" type="checkbox"">
                 <span class=" checkmark-check"></span>
             </label>
-            <label style="display: none;" class="container-checks undercatergory" id="olofView-label">Olof view<input id="olofView" type="checkbox">
+            <label style="display: none;" class="container-checks undercatergory" id="olofView-label">Olof view<input
+                    id="olofView" type="checkbox">
                 <span class="checkmark-check"></span>
             </label>
-            <label style="display: none;" class="undercatergory" for="nightRadius" id="nightRadius-label">Radius<input type="text" id="nightRadius" style="width: 30px;"> <span>(number, pixles)</span>
+            <label style="display: none;" class="undercatergory" for="nightRadius" id="nightRadius-label">Radius<input
+                    type="text" id="nightRadius" style="width: 30px;"> <span>(number, pixles)</span>
             </label>
         </div>
         <br>
         <div class="level-changer">
-            <span style="font-size: 20px;">Level:</span> <br>
-            <label class="undercatergory" for="title">Title: <input type="text" id="title" style="width: 150px;"><span></span>
+            <span class="options-title">Level:</span> <br>
+            <label class="undercatergory" for="title">Title: <input type="text" id="title"
+                    style="width: 150px;"><span></span>
             </label> <br>
-            <label class="undercatergory" for="snowtimer">Snow Timer <input type="text" id="snowtimer" style="width: 50px;"><span>s (how often snow falls)</span>
+            <label class="undercatergory" for="snowtimer">Snow Timer <input type="text" id="snowtimer"
+                    style="width: 50px;"><span>ms (how often snow falls)</span>
             </label>
-            <label class="undercatergory" for="particleAmount">Particle amount <input type="text" id="particleAmount" style="width: 30px;"> <span>(number)</span>
-            </label>
-            <br>
-            <label class="undercatergory" for="realtime">Realtime length <input type="text" id="realtime" style="width: 30px;"> <span>(seconds, number)</span>
-            </label>
-            <br>
-            <label class="undercatergory" for="igTimeStart">In game time start <input type="text" id="igTimeStart" style="width: 30px;"> <span>(XX:XX)</span>
+            <label class="undercatergory" for="particleAmount">Particle amount <input type="text" id="particleAmount"
+                    style="width: 30px;"> <span>(number)</span>
             </label>
             <br>
-            <label class="undercatergory" for="igTimeEnd">In game time end <input type="text" id="igTimeEnd" style="width: 30px;"> <span>(XX:XX)</span>
+            <label class="undercatergory" for="realtime">Realtime length <input type="text" id="realtime"
+                    style="width: 30px;"> <span>(seconds, number)</span>
+            </label>
+            <br>
+            <label class="undercatergory" for="igTimeStart">In game time start <input type="text" id="igTimeStart"
+                    style="width: 30px;"> <span>(XX:XX) (24h)</span>
+            </label>
+            <br>
+            <label class="undercatergory" for="igTimeEnd">In game time end <input type="text" id="igTimeEnd"
+                    style="width: 30px;"> <span>(XX:XX) (24h)</span>
+            </label>
+            <br>
+            <label class="undercatergory" for="pointCap">Points for 3 stars <input type="text" id="pointCap"
+                    style="width: 80px;"> <span>(number)</span>
             </label>
         </div>
-        <br> 
-        
-        <table>
+        <br>
+
+        <table id="song-chooser">
             <tr>
-                <td>Music</td>
-                <td>Music</td>
-                <td>Music</td>
+                <td><label class="container-radio-2">Song 1 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;<input type="radio"
+                            checked="checked" name="music" value="music1">
+                        <span class="checkmark"></span>
+                    </label></td>
+                <td><label class="container-radio-2">Song 2 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;<input type="radio"
+                            name="music" value="music2">
+                        <span class="checkmark"></span>
+                    </label></td>
             </tr>
             <tr>
-                <td>Music</td>
-                <td>Music</td>
-                <td>Music</td>
+                <td><label class="container-radio-2">Song 3 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;<input type="radio"
+                            name="music" value="music3">
+                        <span class="checkmark"></span>
+                    </label></td>
+                <td><label class="container-radio-2">Song 4 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;<input type="radio"
+                            name="music" value="music4">
+                        <span class="checkmark"></span>
+                    </label></td>
             </tr>
         </table>
 
         <br>
-        <a class="doneBtn" onclick="downloadJSON(exportGrid(), `snowshake-park-level-${simplifyTitle(getExportedFilename())}`);">Export to JSON</a> &nbsp;&nbsp; <a class="doneBtn">Save to your game</a>
+        <a class="doneBtn"
+            onclick="downloadJSON();">Export
+            to JSON</a>
+        <a class="doneBtn" onclick="saveLevelToLocalstorage()">Save to your game</a> <br> <br>
+        <a class="doneBtn" onclick="window.location.replace(`../index.html?page=title`);">&lt; Go Back</a>
+
+
+        <p style="font-size: 16px;">
+            Left click to place! Right click to remove!
+        </p>
 
     </div>
     <script>
@@ -389,7 +481,7 @@
                 img: 'tree',
                 width: 144,
                 height: 168,
-                dx: -48,
+                dx: -51,
                 dy: -120
             },
             {
@@ -418,6 +510,12 @@
                 id: obj.id
             });
         }
+        const musicDict = {
+            'music3': 'menu-music.mp3',
+            'music2': 'gtkiajnieoifawhniotftganwiofranfoia.mp3',
+            'music4': 'Backgrund__Intense_v1.mp3',
+            'music1': 'Alt3Bakgrunds.mp3'
+        }
 
         var grid = [];
         var selectedObj = OBJECTS[0];
@@ -440,9 +538,9 @@
             let x = event.pageX + TILESIZE / 2;
             let y = event.pageY + TILESIZE / 2;
 
-            if (isWithinGrid(x, y)) {
-                redraw();
+            redraw();
 
+            if (isWithinGrid(x, y)) {
                 let gridX = Math.round(x / TILESIZE) - 1;
                 let gridY = Math.round(y / TILESIZE) - 1;
 
@@ -482,6 +580,7 @@
 
         $('input[type=radio][name=radio]').on('change', function () {
             selectedObj = OBJECTS.find(o => o.id == this.value);
+            $('.hamburger').click();
         })
 
         window.oncontextmenu = function (event) {
@@ -520,26 +619,28 @@
             return {
                 title: $('#title').val(),
                 olof: {
-                    speed: getNumber($('#olofspeed').val(), 5),
+                    speed: getNumber($('#olofspeed').val(), 4),
                     roaming: $('#olof-roam').is(':checked'),
                     huntRadius: $('#olof-roam').is(':checked') ? getNumber($('#huntRadius').val(), 175) : getNumber($('#olofradius').val(), 175),
                     roamRadius: getNumber($('#roamRadius').val(), 100)
                 },
                 player: {
-                    speed: getNumber($('#playerSpeed').val(), 4)
+                    speed: getNumber($('#playerSpeed').val(), 5)
                 },
                 night: {
                     enabled: $('#night-mode').is(':checked'),
-                    olofView: $('#olof-view').is(':checked'),
+                    olofView: $('#olofView').is(':checked'),
                     radius: getNumber($('#nightRadius').val(), 200)
                 },
                 snowTimer: getNumber($('#snowtimer').val(), 1500),
-                snowParticleAmount: getNumber($('#particleAmount').val(), 150),
+                snowParticleAmount: getNumber($('#particleAmount').val(), 100),
                 time: {
-                    realTime: getNumber($('#realtime').val(), 120),
-                    start: '2069-04-20 ' + getTime($('#igTimeStart').val(), '09:00'),
-                    end: '2069-04-20 ' + getTime($('#igTimeEnd').val(), '15:00')
-                }
+                    realTime: getNumber($('#realtime').val(), 60),
+                    start: `2069-04-20 ${getTime($('#igTimeStart').val(), '09:00')}`,
+                    end: `2069-04-2${getTime($('#igTimeStart').val(), '09:00') > getTime($('#igTimeEnd').val(), '15:00') ? '1' : '0'} ${getTime($('#igTimeEnd').val(), '15:00')}`
+                },
+                music: `music/${musicDict[$('input[type=radio][name=music]:checked').val()]}`,
+                pointCap: getNumber($('#pointCap').val(), 42069)
             }
         }
 
@@ -566,7 +667,7 @@
         }
 
         function simplifyTitle(title = "") {
-            const matches =  title.matchAll(/\w/g);
+            const matches = title.matchAll(/\w/g);
             let string = "";
             for (const s of matches) {
                 string += s[0];
@@ -592,7 +693,7 @@
                 if (obj.id === 'hwall' && wallConnections.find(w => w.includes(obj)) == undefined) {
                     const sameY = grid.filter(w => w.y == obj.y && w.id == obj.id);
                     let connection = [];
-                    for (let i = 0; i < WIDTH; i++) {
+                    for (let i = 0; i < WIDTH + 1; i++) {
                         const wall = sameY.find(w => w.x === i);
                         if (wall == undefined) {
                             if (connection.length > 0) wallConnections.push(connection);
@@ -600,13 +701,13 @@
                         }
                         else {
                             connection.push(wall);
-                        } 
+                        }
                     }
                 }
                 else if (obj.id === 'vwall' && wallConnections.find(w => w.includes(obj)) == undefined) {
                     const sameX = grid.filter(w => w.x == obj.x && w.id == obj.id);
                     let connection = [];
-                    for (let i = 0; i < HEIGHT; i++) {
+                    for (let i = 0; i < HEIGHT + 1; i++) {
                         const wall = sameX.find(w => w.y === i);
                         if (wall == undefined) {
                             if (connection.length > 0) wallConnections.push(connection);
@@ -618,8 +719,8 @@
                     }
                 }
                 else if (obj.id === 'tree') trees.push({
-                    x: (obj.x + 1) * TILESIZE + 27,
-                    y: (obj.y + 1) * TILESIZE + 34
+                    x: (obj.x) * TILESIZE + 24,
+                    y: (obj.y) * TILESIZE + 13
                 });
                 else if (obj.id === 'ospawn') olofSpawns.push({
                     x: obj.x * TILESIZE,
@@ -637,7 +738,7 @@
             }
 
             const input = getInput();
-            const json = {
+            return {
                 __LINK: "https://weep-studios.itch.io/snowshake-park",
                 id: simplifyTitle(input.title) + '-' + new Date().getTime(),
                 title: input.title,
@@ -670,23 +771,38 @@
                     end: input.time.end,
                     realTime: input.time.realTime
                 },
-                music: 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
-                pointCap: 150000000
+                music: input.music,
+                pointCap: input.pointCap
             };
-            return json;
         }
 
 
 
-        function downloadJSON(obj, filename) {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj, null, 2));
+        function downloadJSON() {
+            const filename = `snowshake-park-level-${simplifyTitle(getExportedFilename())}`;
+            var lvl = exportGrid();
+            if (lvl === undefined) return;
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(lvl, null, 2));
             const dlAnchorElem = document.getElementById('downloadAnchorElem');
             dlAnchorElem.setAttribute("href", dataStr);
             dlAnchorElem.setAttribute("download", filename + ".json");
             dlAnchorElem.click();
         }
 
+        function saveLevelToLocalstorage() {
+            if (confirm('You sure you want to save this level to your cookies (localStorage)? If you are unsure what that is, please look it up!')) {
+                var levels = JSON.parse(localStorage.getItem('exportedLevels'));
+                if (levels === null) levels = [];
+                var lvl = exportGrid();
+                if (lvl != undefined) levels.push(lvl);
+
+                localStorage.setItem('exportedLevels', JSON.stringify(levels));
+            }
+        }
+
     </script>
 </body>
 <a id="downloadAnchorElem" style="display:none"></a>
+
 </html>

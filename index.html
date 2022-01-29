@@ -18,8 +18,8 @@
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const page = urlParams.get('page')
-    console.log(page);
 
+    var levels;
 
     var images = [];
     function preload() {
@@ -38,8 +38,12 @@
         './imgs/btn/tutorial_hover.png',
         './imgs/btn/levels.png',
         './imgs/btn/levels_hover.png',
-        './imgs/btn/endless.png',
-        './imgs/btn/endless_hover.png',
+        './imgs/btn/usermade.png',
+        './imgs/btn/usermade_hover.png',
+        './imgs/btn/import.png',
+        './imgs/btn/import_hover.png',
+        './imgs/btn/editor.png',
+        './imgs/btn/editor_hover.png',
 
         './imgs/btn/exit.png',
         './imgs/btn/exit_hover.png',
@@ -74,6 +78,7 @@
     }
 
     function showMenu() {
+        $('.userlevels').hide();
         $('.levels').hide();
         $('#choose-gamemode').hide();
         $('.cred').hide();
@@ -81,11 +86,108 @@
         $('.menu').show();
     }
 
+    function showUserMade() {
+
+        $('#userMadeLevels').empty();
+
+        levels = JSON.parse(localStorage.getItem('exportedLevels'));
+        if (levels !== null && levels.length !== 0) {
+            var add = '<tr>';
+
+            for (let i = 0; i < levels.length; i++) {
+                const level = levels[i];
+                if (i % 9 === 0 && i !== 0) add += '</tr><tr>';
+                add += `<td class="level" onclick="playLevel('${level.id}')"> ${i + 1} </td>`;
+            }
+
+            add += '</tr>';
+            $(add).appendTo('#userMadeLevels');
+        }
+
+        $('.menu').hide();
+        $('#choose-gamemode').hide();
+        $('.userlevels').show();
+        $('.slider-container').show();
+
+
+
+
+
+
+
+    }
+
+    function importJSON() {
+        $('#file-input').trigger('click');
+    }
+
+
+
+
     function playLevel(level) {
         window.location.replace(`./game.html?level=${level}`);
     }
 
+    const mouseeee = {
+            x: undefined,
+            y: undefined
+        }
+
     window.onload = (event) => {
+
+
+        
+
+        document.body.addEventListener("mousemove", (event) => {
+            mouseeee.x = event.clientX;
+            mouseeee.y = event.clientY;
+        });
+
+
+        window.oncontextmenu = function (event) {
+            event.preventDefault();
+            const curry = $(document.elementFromPoint(mouseeee.x, mouseeee.y));
+            if (curry?.attr('onclick')?.includes('playLevel(')) {
+                const id = /^playLevel\('(.+)'\)$/.exec(curry?.attr('onclick'))[1];
+                var level;
+                var exportedLevels = JSON.parse(localStorage.getItem('exportedLevels'));
+                if (exportedLevels != null) {
+                    level = exportedLevels.find(level => level.id === id);
+                }
+                if (level) {
+                    if (confirm(`Are you sure you want to remove the level: "${level.title}"?`)) {
+                        levels = levels.filter(lvl => lvl.id !== id);
+                        localStorage.setItem('exportedLevels', JSON.stringify(levels));
+                        setTimeout(() => {
+                            showUserMade();
+                        }, 200);
+                    }
+                }
+            }
+
+        }
+
+        $('#file-input').on('change', function () { // reused code from other project :)
+            const file = $(this).prop('files')[0];
+            const jsonRegex = new RegExp('\\.json$');
+
+            if (!jsonRegex.test(file.name)) {
+                return;
+            }
+            const fileReader = new FileReader();
+            fileReader.onload = function () {
+                const obj = JSON.parse(fileReader.result); // Parse the result into an object 
+
+                var levels = JSON.parse(localStorage.getItem('exportedLevels'));
+                if (levels === null) levels = [];
+                levels.push(obj);
+
+                levels = localStorage.setItem('exportedLevels', JSON.stringify(levels));
+
+            };
+            fileReader.readAsText(file);
+            $('#file-input').val(''); // detta funear :)
+        });
 
         var gameLogoEffect = new Audio('./music/WeepStudiosEffect.mp3');
         gameLogoEffect.volume = 0.5;
@@ -159,6 +261,8 @@
 </script>
 
 <body>
+
+    <input id="file-input" type="file" name="name" accept=".json" style="display: none;" />
     <div class="noselect">
         <div class="intro">
             <div class="image">
@@ -190,12 +294,18 @@
                 <div class="snowflake"><img src="./sprites/snowflake.png"></div>
             </div>
             <div class="buttons">
-                <img src="./imgs/logo.png" alt="Snowshake Park"  style="transform: scale(1.6);">
+                <img src="./imgs/logo.png" alt="Snowshake Park" style="transform: scale(1.6);">
                 <br><br><br><br><br>
 
                 <div id="start-btn" class="img-button-link" style="transform: scale(1.5);"> </div>
                 <br>
                 <div id="info-btn" class="img-button-link" style="transform: scale(1.5);" onclick="showInfo();"> </div>
+                <br>
+                <div id="editor-btn" class="img-button-link" style="transform: scale(1.5);"
+                    onclick="window.location.replace(`./level-editor/index.html`);"> </div>
+                <br>
+                <div id="import-btn" class="img-button-link" style="transform: scale(1.5);" onclick="importJSON();">
+                </div>
             </div>
         </div>
 
@@ -207,9 +317,10 @@
             <a class="btn-gamemode" onclick="showLevels();">Levels</a>
             <a class="btn-gamemode">Endless</a> -->
 
-            <div id="tutorial-btn" class="start-option img-button-link" onclick="window.location.replace(`./game.html?level=tutorial`);"> </div>
+            <div id="tutorial-btn" class="start-option img-button-link"
+                onclick="window.location.replace(`./game.html?level=tutorial`);"> </div>
             <div id="levels-btn" class="start-option img-button-link" onclick="showLevels();"> </div>
-            <div id="endless-btn" class="start-option img-button-link"> </div>
+            <div id="endless-btn" class="start-option img-button-link" onclick="showUserMade();"> </div>
 
         </div>
 
@@ -218,8 +329,13 @@
             <table style="border-spacing: 10px;">
 
                 <tr>
-                    <td class="level" onclick="playLevel('test')"> 1 </td>
-                    <td class="level" onclick="playLevel('level_2')"> 2 </td>
+                    <td class="level" onclick="playLevel('level_11')"> 1 </td>
+                    <td class="level" onclick="playLevel('fan-1643417907297')"> 2 </td>
+                    <td class="level" onclick="playLevel('level_3-1643417741374')"> 3 </td>
+                    <td class="level" onclick="playLevel('level_night-1643418926203')"> 4 </td>
+                    <td class="level" onclick="playLevel('level_6-1643418995305')"> 5 </td>
+                    <td class="level" onclick="playLevel('olof_view_night-1643419237024')"> 6 </td>
+                    <td class="level" onclick="playLevel('level_8-1643419574860')"> 7 </td>
                 </tr>
 
             </table>
@@ -227,14 +343,44 @@
             <div id="level-go-back-btn" class="img-button-link" onclick="showMenu();"> </div>
 
 
+            <p>
+                Levels are not in order
+            </p>
+
+        </div>
+
+        <div class="userlevels">
+
+            <table style="border-spacing: 10px;" id="userMadeLevels">
+
+
+            </table>
+
+            <div id="level-go-back-btn" class="img-button-link" style="bottom: 2%;" onclick="showMenu();"> </div>
+
+
+            <p style="font-size: 20px;">
+                Left click to play! Right click to remove!
+            </p>
+
         </div>
 
 
         <div class="cred">
 
-            <h1> Backstory: </h1>
-            <h2>It is a hot summer day, the local authority has decided <br> to add some new nice trees to their new park: Snowshake Park</h2>
-            <h2>Suddenly a snowstorm comes in over the city and the authoritys <br> hire you to shake down the snow from the trees! Good Luck!</h2>
+            <div class="cred-text">
+                <h1> Backstory: </h1>
+                <h2>It is a hot summer day, and the city has decided <br> to add some nice new trees to their new
+                    park: Snowshake Park.</h2>
+                <h2>Suddenly, a snowstorm comes despite of the summer heat and the city <br> hires you to shake down the
+                    snow
+                    from the trees in order to keep them alive. Good Luck!</h2>
+
+                <h1> Credit: </h1>
+                <h2>Made by: Ellivers, Philip2809, Ebbe, Billeboj</h2>
+            </div>
+
+
 
             <div id="level-go-back-btn" class="img-button-link" onclick="showMenu();"> </div>
 

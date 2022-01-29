@@ -109,12 +109,8 @@ function endless() {
             }
         }
 
-        console.log(treebad, wallbad)
-
         if (!treebad && !wallbad) grid.push({ type: 'wall', obj: undefined, x: x, y: y, dx: dx, dy: dy })
     }
-
-    console.log(grid);
 
     const treePositions = [];
     const wallPositions = [];

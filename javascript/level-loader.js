@@ -4,6 +4,7 @@ let sound;
 function loadMusic(file) {
 
   sound = PIXI.sound.Sound.from(file);
+  sound.loop = true;
   sound.play();
 
   var slider = document.getElementById("myRange");
@@ -12,7 +13,6 @@ function loadMusic(file) {
   }
 
   $('.volume-icon').on('click', function () {
-    console.log(!sound.isPlaying)
     if (!sound.isPlaying) {
       sound.resume();
       this.src = './imgs/volume.png';
@@ -30,9 +30,16 @@ function loadMusic(file) {
 
 
 function loadLevel(id) {
-  const level = LEVELS.find(level => level.id === id);
+  var level = LEVELS.find(level => level.id === id);
 
-  if (!level) {
+  if (level == undefined) {
+    var exportedLevels = JSON.parse(localStorage.getItem('exportedLevels'));
+    if (exportedLevels != null) {
+      level = exportedLevels.find(level => level.id === id);
+    }
+  }
+
+  if (level == undefined) {
     console.error(`Level "${id}" does not exist!`);
     return;
   } else if (level.tutorial) {
@@ -137,44 +144,6 @@ const LEVELS = [
 
 
   {
-    "id": "test",
-    "title": "TESTING !!!",
-    "wallPositions": [
-      // { "x1": 100, "y1": 100, "x2": 100 + (10 * WALL_SIZE), "y2": 100 }
-    ],
-    "treePositions": [
-      // { "x": 500, "y": 500 },
-      // { "x": 100, "y": 500 },
-      // { "x": 800, "y": 500 },
-    ],
-    "olof": {
-      "enabled": true,
-      "spawns": [
-        { x: 250, y: 200 },
-        { x: 250, y: 200 },
-        { x: 250, y: 200 }
-      ],
-      "speed": 5,
-      "roaming": true,
-      "huntRadius": 175,
-      "roamRadius": 100
-    },
-    "night": {
-      "enabled": false,
-      "radius": 200,
-      "olofView": false
-    },
-    "playerSpeed": 4,
-    "time": {
-      "start": '2069-04-20 09:00',
-      "end": '2069-04-20 15:00',
-      "realTime": 3,
-    },
-    "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
-    "pointCap": 1500000000000,
-  },
-
-  {
     "tutorial": true,
     "id": "tutorial",
     "title": "Tutorial",
@@ -189,52 +158,7 @@ const LEVELS = [
     "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
   },
 
-  {
-    "id": "level_1",
-    "title": "Level 1",
-    "wallPositions": [
-      { x: 250, y: 150, dx: 0, dy: 7 * WALL_SIZE },
-      { x: 250 + WALL_SIZE, y: 150 + 3 * WALL_SIZE, dx: 13 * WALL_SIZE, dy: 0 },
-      { x: 250 + 14 * WALL_SIZE, y: 150, dx: 0, dy: 7 * WALL_SIZE },
-      { x: 250 + 4 * WALL_SIZE, y: 150 + 4 * WALL_SIZE, dx: 0, dy: 3 * WALL_SIZE }
-    ],
-    "treePositions": [
-      { "x": 500, "y": 600 },
-      // { "x": 100, "y": 500 },
-      // { "x": 800, "y": 500 },
-    ],
-    "olof": {
-      "enabled": true,
-      "spawns": [
-        { x: 250, y: 200 },
-        { x: 250, y: 200 },
-        { x: 250, y: 200 }
-      ],
-      "speed": 5,
-      "roaming": true,
-      "huntRadius": 175,
-      "roamRadius": 100
-    },
-    "night": {
-      "enabled": false,
-      "radius": 200,
-      "olofView": false
-    },
-    "player": {
-      "speed": 4,
-      "spawn": { x: 1000, y: 500 }
-    },
-    "snowTimer": 1500,
-    "snowParticleAmount": 150,
-    "time": {
-      "start": '2069-04-20 09:00',
-      "end": '2069-04-20 15:00',
-      "realTime": 180,
-    },
-    "music": 'music/gtkiajnieoifawhniotftganwiofranfoia.mp3',
-    "pointCap": 150000000,
-  },
-
+  
   {
     "id": "level_11",
     "title": "Level 11",
@@ -336,62 +260,102 @@ const LEVELS = [
     "time": {
       "start": "2069-04-20 09:00",
       "end": "2069-04-20 15:00",
-      "realTime": 180
+      "realTime": 80
     },
     "music": "music/gtkiajnieoifawhniotftganwiofranfoia.mp3",
     "pointCap": 150000000
   },
 
   {
-    "id": "exported_level",
-    "title": "Exported Level",
+    "id": "fan-1643417907297",
+    "title": "fan",
     "wallPositions": [
       {
-        "x": 144,
+        "x": 192,
         "y": 240,
-        "dx": 624,
-        "dy": 0
-      },
-      {
-        "x": 720,
-        "y": 0,
         "dx": 0,
         "dy": 240
       },
       {
-        "x": 144,
-        "y": 0,
+        "x": 1056,
+        "y": 240,
         "dx": 0,
         "dy": 240
       },
       {
         "x": 240,
-        "y": 96,
-        "dx": 48,
+        "y": 336,
+        "dx": 384,
         "dy": 0
       },
       {
-        "x": 336,
-        "y": 96,
+        "x": 672,
+        "y": 336,
         "dx": 384,
+        "dy": 0
+      },
+      {
+        "x": 624,
+        "y": 192,
+        "dx": 0,
+        "dy": 336
+      },
+      {
+        "x": 480,
+        "y": 528,
+        "dx": 336,
+        "dy": 0
+      },
+      {
+        "x": 480,
+        "y": 144,
+        "dx": 336,
         "dy": 0
       }
     ],
     "treePositions": [
       {
-        "x": 939,
-        "y": 611
+        "x": 648,
+        "y": 109
+      },
+      {
+        "x": 120,
+        "y": 397
+      },
+      {
+        "x": 648,
+        "y": 637
+      },
+      {
+        "x": 1176,
+        "y": 397
       }
     ],
     "olof": {
       "enabled": true,
       "spawns": [
         {
-          "x": 432,
+          "x": 48,
           "y": 192
+        },
+        {
+          "x": 384,
+          "y": 48
+        },
+        {
+          "x": 1056,
+          "y": 48
+        },
+        {
+          "x": 1056,
+          "y": 576
+        },
+        {
+          "x": 288,
+          "y": 576
         }
       ],
-      "speed": 5,
+      "speed": 4,
       "roaming": true,
       "huntRadius": 175,
       "roamRadius": 100
@@ -402,21 +366,502 @@ const LEVELS = [
       "olofView": false
     },
     "player": {
-      "speed": 4,
+      "speed": 5,
       "spawn": {
+        "x": 1008,
+        "y": 576
+      }
+    },
+    "snowTimer": 1500,
+    "snowParticleAmount": 100,
+    "time": {
+      "start": "2069-04-20 09:00",
+      "end": "2069-04-20 15:00",
+      "realTime": 70
+    },
+    "music": "music/Alt3Bakgrunds.mp3",
+    "pointCap": 42069
+  },
+
+  {
+    "__LINK": "https://weep-studios.itch.io/snowshake-park",
+    "id": "level_3-1643417741374",
+    "title": "level_3",
+    "wallPositions": [
+      {
+        "x": 624,
+        "y": 0,
+        "dx": 0,
+        "dy": 384
+      }
+    ],
+    "treePositions": [
+      {
+        "x": 264,
+        "y": 205
+      },
+      {
+        "x": 408,
+        "y": 205
+      },
+      {
+        "x": 1032,
+        "y": 205
+      },
+      {
+        "x": 888,
+        "y": 205
+      }
+    ],
+    "olof": {
+      "enabled": false,
+      "spawns": [],
+      "speed": 4,
+      "roaming": true,
+      "huntRadius": 175,
+      "roamRadius": 100
+    },
+    "night": {
+      "enabled": false,
+      "radius": 200,
+      "olofView": false
+    },
+    "player": {
+      "speed": 5,
+      "spawn": {
+        "x": 624,
+        "y": 432
+      }
+    },
+    "snowTimer": 2000,
+    "snowParticleAmount": 30,
+    "time": {
+      "start": "2069-04-20 08:00",
+      "end": "2069-04-20 17:00",
+      "realTime": 60
+    },
+    "music": "music/menu-music.mp3",
+    "pointCap": 45000
+  },
+
+  {
+    "__LINK": "https://weep-studios.itch.io/snowshake-park",
+    "id": "level_6-1643418995305",
+    "title": "level_6",
+    "wallPositions": [
+      {
+        "x": 288,
+        "y": 480,
+        "dx": 720,
+        "dy": 0
+      },
+      {
+        "x": 288,
+        "y": 192,
+        "dx": 240,
+        "dy": 0
+      },
+      {
+        "x": 768,
+        "y": 192,
+        "dx": 240,
+        "dy": 0
+      },
+      {
+        "x": 240,
+        "y": 192,
+        "dx": 0,
+        "dy": 336
+      },
+      {
+        "x": 1008,
+        "y": 192,
+        "dx": 0,
+        "dy": 336
+      }
+    ],
+    "treePositions": [
+      {
+        "x": 120,
+        "y": 637
+      },
+      {
+        "x": 1176,
+        "y": 637
+      },
+      {
+        "x": 408,
+        "y": 397
+      },
+      {
+        "x": 888,
+        "y": 397
+      },
+      {
+        "x": 120,
+        "y": 109
+      },
+      {
+        "x": 1176,
+        "y": 109
+      },
+      {
+        "x": 648,
+        "y": 397
+      }
+    ],
+    "olof": {
+      "enabled": true,
+      "spawns": [
+        {
+          "x": 1152,
+          "y": 384
+        },
+        {
+          "x": 624,
+          "y": 624
+        },
+        {
+          "x": 48,
+          "y": 336
+        },
+        {
+          "x": 528,
+          "y": 336
+        },
+        {
+          "x": 720,
+          "y": 336
+        }
+      ],
+      "speed": 4,
+      "roaming": true,
+      "huntRadius": 200,
+      "roamRadius": 175
+    },
+    "night": {
+      "enabled": false,
+      "radius": 200,
+      "olofView": false
+    },
+    "player": {
+      "speed": 5,
+      "spawn": {
+        "x": 1008,
+        "y": 48
+      }
+    },
+    "snowTimer": 1400,
+    "snowParticleAmount": 120,
+    "time": {
+      "start": "2069-04-20 09:00",
+      "end": "2069-04-20 15:00",
+      "realTime": 90
+    },
+    "music": "music/menu-music.mp3",
+    "pointCap": 72000
+  },
+
+  {
+    "__LINK": "https://weep-studios.itch.io/snowshake-park",
+    "id": "level_night-1643418926203",
+    "title": "level_night",
+    "wallPositions": [
+      {
+        "x": 0,
+        "y": 336,
+        "dx": 432,
+        "dy": 0
+      },
+      {
+        "x": 624,
+        "y": 336,
+        "dx": 192,
+        "dy": 0
+      },
+      {
+        "x": 1008,
+        "y": 336,
+        "dx": 288,
+        "dy": 0
+      },
+      {
+        "x": 576,
+        "y": 528,
+        "dx": 0,
+        "dy": 192
+      },
+      {
+        "x": 672,
+        "y": 0,
+        "dx": 0,
+        "dy": 192
+      }
+    ],
+    "treePositions": [
+      {
+        "x": 264,
+        "y": 301
+      },
+      {
+        "x": 1128,
+        "y": 301
+      },
+      {
+        "x": 1032,
+        "y": 637
+      },
+      {
+        "x": 216,
+        "y": 637
+      }
+    ],
+    "olof": {
+      "enabled": true,
+      "spawns": [
+        {
+          "x": 1200,
+          "y": 48
+        },
+        {
+          "x": 48,
+          "y": 48
+        },
+        {
+          "x": 48,
+          "y": 624
+        },
+        {
+          "x": 1248,
+          "y": 624
+        }
+      ],
+      "speed": 4,
+      "roaming": true,
+      "huntRadius": 175,
+      "roamRadius": 100
+    },
+    "night": {
+      "enabled": true,
+      "radius": 200,
+      "olofView": false
+    },
+    "player": {
+      "speed": 5,
+      "spawn": {
+        "x": 672,
+        "y": 432
+      }
+    },
+    "snowTimer": 2000,
+    "snowParticleAmount": 70,
+    "time": {
+      "start": "2069-04-20 09:00",
+      "end": "2069-04-20 15:00",
+      "realTime": 50
+    },
+    "music": "music/gtkiajnieoifawhniotftganwiofranfoia.mp3",
+    "pointCap": 50000
+  },
+
+  {
+    "__LINK": "https://weep-studios.itch.io/snowshake-park",
+    "id": "olof_view_night-1643419237024",
+    "title": "olof_view_night",
+    "wallPositions": [
+      {
+        "x": 336,
+        "y": 192,
+        "dx": 528,
+        "dy": 0
+      },
+      {
+        "x": 48,
+        "y": 432,
+        "dx": 192,
+        "dy": 0
+      },
+      {
+        "x": 960,
+        "y": 432,
+        "dx": 192,
+        "dy": 0
+      },
+      {
         "x": 432,
+        "y": 576,
+        "dx": 336,
+        "dy": 0
+      }
+    ],
+    "treePositions": [
+      {
+        "x": 1032,
+        "y": 637
+      },
+      {
+        "x": 168,
+        "y": 637
+      },
+      {
+        "x": 600,
+        "y": 493
+      },
+      {
+        "x": 1032,
+        "y": 205
+      },
+      {
+        "x": 168,
+        "y": 205
+      }
+    ],
+    "olof": {
+      "enabled": true,
+      "spawns": [
+        {
+          "x": 576,
+          "y": 144
+        }
+      ],
+      "speed": 4,
+      "roaming": false,
+      "huntRadius": 275,
+      "roamRadius": 275
+    },
+    "night": {
+      "enabled": true,
+      "radius": 275,
+      "olofView": true
+    },
+    "player": {
+      "speed": 5,
+      "spawn": {
+        "x": 576,
         "y": 288
       }
     },
     "snowTimer": 1500,
-    "snowParticleAmount": 150,
+    "snowParticleAmount": 70,
     "time": {
       "start": "2069-04-20 09:00",
       "end": "2069-04-20 15:00",
-      "realTime": 180
+      "realTime": 60
     },
-    "music": "music/gtkiajnieoifawhniotftganwiofranfoia.mp3",
-    "pointCap": 150000000
+    "music": "music/Backgrund__Intense_v1.mp3",
+    "pointCap": 64000
+  },
+
+  {
+    "__LINK": "https://weep-studios.itch.io/snowshake-park",
+    "id": "level_8-1643419574860",
+    "title": "level_8",
+    "wallPositions": [
+      {
+        "x": 432,
+        "y": 0,
+        "dx": 0,
+        "dy": 384
+      },
+      {
+        "x": 480,
+        "y": 336,
+        "dx": 96,
+        "dy": 0
+      },
+      {
+        "x": 1008,
+        "y": 144,
+        "dx": 288,
+        "dy": 0
+      },
+      {
+        "x": 1008,
+        "y": 192,
+        "dx": 0,
+        "dy": 192
+      },
+      {
+        "x": 1008,
+        "y": 576,
+        "dx": 0,
+        "dy": 144
+      },
+      {
+        "x": 240,
+        "y": 192,
+        "dx": 192,
+        "dy": 0
+      }
+    ],
+    "treePositions": [
+      {
+        "x": 1224,
+        "y": 109
+      },
+      {
+        "x": 312,
+        "y": 157
+      },
+      {
+        "x": 120,
+        "y": 301
+      },
+      {
+        "x": 1176,
+        "y": 637
+      }
+    ],
+    "olof": {
+      "enabled": true,
+      "spawns": [
+        {
+          "x": 144,
+          "y": 96
+        },
+        {
+          "x": 1152,
+          "y": 240
+        },
+        {
+          "x": 768,
+          "y": 624
+        },
+        {
+          "x": 144,
+          "y": 624
+        },
+        {
+          "x": 1104,
+          "y": 48
+        }
+      ],
+      "speed": 4,
+      "roaming": true,
+      "huntRadius": 200,
+      "roamRadius": 175
+    },
+    "night": {
+      "enabled": true,
+      "radius": 150,
+      "olofView": false
+    },
+    "player": {
+      "speed": 5,
+      "spawn": {
+        "x": 672,
+        "y": 48
+      }
+    },
+    "snowTimer": 1400,
+    "snowParticleAmount": 140,
+    "time": {
+      "start": "2069-04-20 23:00",
+      "end": "2069-04-21 05:00",
+      "realTime": 60
+    },
+    "music": "music/Backgrund__Intense_v1.mp3",
+    "pointCap": 72000
   }
 ]
 

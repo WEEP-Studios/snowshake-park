@@ -30,9 +30,9 @@ function spawnPart2() {
         const wallLength = 4 * WALL_SIZE;
 
         const walls = addWalls([
-            {x: wallStartX, y: wallEndY, dx: wallLength, dy: 0},
+            {x: wallStartX, y: wallEndY, dx: wallLength + WALL_SIZE, dy: 0},
             {x: wallStartX, y: wallStartY, dx: 0, dy: wallLength},
-            {x: wallEndX, y: wallStartY, dx: 0, dy: wallLength + WALL_SIZE}
+            {x: wallEndX, y: wallStartY, dx: 0, dy: wallLength}
         ]);
 
         currentLevel.walls = walls;
@@ -82,7 +82,6 @@ function startTutorial(level) {
 
 
     tutTree = addTrees([{ "x": 100, "y": 200 }], true)
-    console.log(tutTree);
     app.stage.addChild(tutTree[0]);
     currentLevel.trees = tutTree;
 

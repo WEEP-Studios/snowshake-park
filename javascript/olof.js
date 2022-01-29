@@ -132,7 +132,6 @@ function bounceOlofTo(x, y) {
 function respawnOlof() {
     let closestDist = 10000000000;
     let bestI;
-    console.log(olof.settings)
     for (let i = 0; i < olof.settings.spawns.length; i++) {
         const olofSpawnPos = olof.settings.spawns[i];
         const dx = sprite.x - olofSpawnPos.x;

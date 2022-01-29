@@ -30,8 +30,18 @@ html, body {
                                     supported by Chrome, Edge, Opera and Firefox */
 }
 
+@font-face {
+    font-family: "Bungee-Regular";
+    src: url('../fonts/Bungee-Regular.ttf');
+}
+
 * {
     image-rendering: pixelated; /* viktigt */
+}
+
+a, label, span, button, .cred, .level {
+    font-family: "Bungee-Regular", sans-serif;
+    line-height: 2em;
 }
 
 .slider {
@@ -83,6 +93,22 @@ html, body {
     background: url('../imgs/btn/infocred_hover.png');
 }
 
+#editor-btn {
+    background: url('../imgs/btn/editor.png');
+}
+
+#editor-btn:hover {
+    background: url('../imgs/btn/editor_hover.png');
+}
+
+#import-btn {
+    background: url('../imgs/btn/import.png');
+}
+
+#import-btn:hover {
+    background: url('../imgs/btn/import_hover.png');
+}
+
 #tutorial-btn {
     background: url('../imgs/btn/tutorial.png')
 }
@@ -100,11 +126,11 @@ html, body {
 }
 
 #endless-btn {
-    background: url('../imgs/btn/endless.png');
+    background: url('../imgs/btn/usermade.png');
 }
 
 #endless-btn:hover {
-    background: url('../imgs/btn/endless_hover.png');
+    background: url('../imgs/btn/usermade_hover.png');
 }
 
 #level-go-back-btn {
